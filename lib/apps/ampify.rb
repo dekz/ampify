@@ -22,9 +22,8 @@ end
 get '/band/:id/everything' do
   band = Bandcamp.get.band params[:id]
   disco = Bandcamp.get.discography params[:id]
-  albums = disco.instance_exec { @albums }
 
-  album_tracks = albums.map {|album| Bandcamp.get.album album.album_id}
+  album_tracks = disco.albums.map { |album| Bandcamp.get.album album.album_id }
 
   # pry binding
 
@@ -33,7 +32,7 @@ get '/band/:id/everything' do
       :band => band,
       :disco => disco,
       :tracks => album_tracks,
-      :albums => albums
+      :albums => disco.albums
     },
     :layout => :layout
   }
