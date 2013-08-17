@@ -11,12 +11,30 @@ get '/' do
   haml :index
 end
 
-get '/artist/:id' do
+get '/band/:id' do
   result = Bandcamp.get.band params[:id]
-  haml :artist, :locals => {:artist => result}
+  haml :band, {
+    :locals => {:band => result},
+    :layout => :layout
+  }
 end
 
-get '/artist/:id/discography' do
+get '/band/:id/everything' do
+  band = Bandcamp.get.band params[:id]
+  disco = Bandcamp.get.discography params[:id]
+  albums = disco.instance_exec { @albums }
+
+  haml :band, {
+    :locals => {
+      :band => result,
+
+    },
+    :layout => :layout
+  }
+end
+
+
+get '/band/:id/discography' do
   content_type :json
   result = Bandcamp.get.discography params[:id]
   result.to_json
@@ -34,7 +52,7 @@ get '/album/:id' do
   result.to_json
 end
 
-get '/search/artist/:text' do
+get '/search/band/:text' do
   content_type :json
   results = Bandcamp.search params[:text]
   results.map { |r| r.to_json }
