@@ -3,4 +3,9 @@
 
 %h3 albums:
 
-%div= pp band.to_json
+%div= band.to_json()
+
+%div
+  -tracks.each do |track|
+    %audio
+      %source={:src => track.streaming_url, :preload => 'metadata', :controls => '' }

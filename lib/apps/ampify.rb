@@ -24,10 +24,16 @@ get '/band/:id/everything' do
   disco = Bandcamp.get.discography params[:id]
   albums = disco.instance_exec { @albums }
 
+  album_tracks = albums.map {|album| Bandcamp.get.album album.album_id}
+
+  # pry binding
+
   haml :band, {
     :locals => {
-      :band => result,
-
+      :band => band,
+      :disco => disco,
+      :tracks => album_tracks,
+      :albums => albums
     },
     :layout => :layout
   }
