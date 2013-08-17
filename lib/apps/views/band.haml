@@ -3,9 +3,10 @@
 
 %h3 albums:
 
-%div= band.to_json()
+%div= band
 
+/ %div= tracks
 %div
   -tracks.each do |track|
-    %audio
-      %source={:src => track.streaming_url, :preload => 'metadata', :controls => '' }
+    %audio{ :controls => 'controls' }
+      %source{:src => track.streaming_url, :preload => 'metadata', :controls => '' }

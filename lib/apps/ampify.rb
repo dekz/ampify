@@ -23,15 +23,25 @@ get '/band/:id/everything' do
   band = Bandcamp.get.band params[:id]
   disco = Bandcamp.get.discography params[:id]
 
-  album_tracks = disco.albums.map { |album| Bandcamp.get.album album.album_id }
+  # We're going to have an array of arrays here,
+  # ie an array of albums each which has an array of songs
+  album_tracks = disco.albums.map { |album| Bandcamp.get.album(album.album_id).tracks }
+  songs = []
 
-  # pry binding
+  album_tracks.each do |album|
+    album.each do |track|
+      songs.push track
+    end
+  end
+
+  #pry binding
+  Haml::Options.defaults[:format] = :html5
 
   haml :band, {
     :locals => {
       :band => band,
       :disco => disco,
-      :tracks => album_tracks,
+      :tracks => songs,
       :albums => disco.albums
     },
     :layout => :layout
