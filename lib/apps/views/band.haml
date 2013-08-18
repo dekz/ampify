@@ -5,8 +5,9 @@
 
 %div= band
 
-/ %div= tracks
+%audio{:id => 'player', :src => '', :preload => 'metadata', :controls => 'controls'}
+
 %div
   -tracks.each do |track|
-    %audio{ :controls => 'controls' }
-      %source{:src => track.streaming_url, :preload => 'metadata', :controls => '' }
+    %li{:id => track.track_id}
+    

@@ -3,51 +3,26 @@ require 'sinatra'
 require 'bandcamp_api'
 require 'pry'
 require 'haml'
+require 'coffee-script'
 
 $sensitive = YAML::load File.read './sensitive.yml'
 Bandcamp.config.api_key = $sensitive[:api_key]
 
 get '/' do
-  haml :index
+  haml :app, {
+    :layout => :layout
+  }
+end
+
+get '/js/ampify.js' do
+  coffee :ampify
 end
 
 get '/band/:id' do
+  content_type :json
   result = Bandcamp.get.band params[:id]
-  haml :band, {
-    :locals => {:band => result},
-    :layout => :layout
-  }
+  result.to_json
 end
-
-get '/band/:id/everything' do
-  band = Bandcamp.get.band params[:id]
-  disco = Bandcamp.get.discography params[:id]
-
-  # We're going to have an array of arrays here,
-  # ie an array of albums each which has an array of songs
-  album_tracks = disco.albums.map { |album| Bandcamp.get.album(album.album_id).tracks }
-  songs = []
-
-  album_tracks.each do |album|
-    album.each do |track|
-      songs.push track
-    end
-  end
-
-  #pry binding
-  Haml::Options.defaults[:format] = :html5
-
-  haml :band, {
-    :locals => {
-      :band => band,
-      :disco => disco,
-      :tracks => songs,
-      :albums => disco.albums
-    },
-    :layout => :layout
-  }
-end
-
 
 get '/band/:id/discography' do
   content_type :json
