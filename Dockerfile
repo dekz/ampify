@@ -1,11 +1,10 @@
-FROM      ubuntu:12.10
+FROM      ubuntu
 MAINTAINER  Jacob Evans "jacob@dekz.net"
 
-# make sure the package repository is up to date
-#RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
 
-RUN apt-get install -y inotify-tools nginx apache2 openssh-server
+#RUN apt-get install -y inotify-tools nginx apache2 openssh-server
+RUN apt-get install -y nginx
 RUN apt-get install -q -y ca-certificates
 RUN apt-get install -y -q vim
 RUN apt-get install -y -q curl
@@ -29,5 +28,10 @@ RUN mkdir /usr/local/rbenv/plugins
 RUN git clone https://github.com/sstephenson/ruby-build.git /usr/local/rbenv/plugins/ruby-build
 
 ENV RBENV_ROOT /usr/local/rbenv
-ENV PATH "$RBENV_ROOT/bin:$RBENV_ROOT/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV PATH $RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH
 RUN rbenv install 2.0.0-p247
+RUN rbenv rehash
+RUN rbenv global 2.0.0-p247
+RUN gem install bundler
+RUN gem install passenger
+RUN gem install passenger-install-nginx-module
