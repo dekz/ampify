@@ -1,25 +1,44 @@
 $ ->
+  Track = Backbone.Model
+  Album = Backbone.Model
+  Playlist = Backbone.Collection.extend
+    url: '/album'  
+    model: Album
+
+  # views
   AppView = Backbone.View.extend 
     el: $ '#ampify'
 
-    initialize: ->
-      playlist.fetch()
+    initialize: (playlist) ->
+      playlist.bind 'add', @addAlbum, this
+
       @render()
+      
+      playlist.add [
+        new Album
+          id: 3619628392
+      ]
 
     render: ->
-      @$el.html 'i school MCs cause im the motherfuckin dean'
+      @$el.html 'waiting for album'
       return this
 
+    addAlbum: (album) ->
+      view = new AlbumView {model: album}
+      view.model.fetch 
+        success: =>
+          console.log this
+          @$el.append view.render().el
 
-  Track = Backbone.Model.extend
-    defaults: ->
-      grep: 'something'
-  
-  Playlist = Backbone.Collection.extend
-    model: Track
-    url: '/album/3619628392'
+  AlbumView = Backbone.View.extend
+    render: ->
+      console.log @model.get 'tracks'
+      for track in @model.get 'tracks'
+        @$el.append JSON.stringify(track)
+      return this
 
-  playlist = new Playlist
-  appView = new AppView
+  # Instances
 
-  console.log playlist
+  # Tycho - Dive
+  # 3619628392
+  appView = new AppView (new Playlist)
