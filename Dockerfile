@@ -1,6 +1,10 @@
 FROM      ubuntu
 MAINTAINER  Jacob Evans "jacob@dekz.net"
 
+RUN apt-get -y update
+RUN apt-get install -y -q software-properties-common
+RUN apt-get install -y -q python-software-properties
+RUN add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
 RUN apt-get update
 
 #RUN apt-get install -y inotify-tools nginx apache2 openssh-server
