@@ -1,23 +1,34 @@
 $ ->
   Track = Backbone.Model
-  Album = Backbone.Model
-  Playlist = Backbone.Collection.extend
-    url: '/album'  
+  
+  Album = Backbone.Model.extend
+    defaults:
+      tracks: []
+
+  Playlist = Backbone.Collection.extend  
+    url: '/album'
     model: Album
 
   # views
   AppView = Backbone.View.extend 
     el: $ '#ampify'
 
-    initialize: (playlist) ->
-      playlist.bind 'add', @addAlbum, this
+    initialize: () ->
+      @collection = new Playlist
+      @listenTo @collection, 'add', @addAlbum
 
       @render()
       
-      playlist.add [
+      @collection.add [
         new Album
           id: 3619628392
       ]
+      
+      @collection.add [
+        new Album
+          id: 1546934218
+      ]
+
 
     render: ->
       @$el.html 'waiting for album'
@@ -25,20 +36,25 @@ $ ->
 
     addAlbum: (album) ->
       view = new AlbumView {model: album}
-      view.model.fetch 
-        success: =>
-          console.log this
-          @$el.append view.render().el
-
+      @$el.append view.render().el
+      
   AlbumView = Backbone.View.extend
+    initialize: ->
+      @listenTo @model, 'change', @render
+      @model.fetch()
+
     render: ->
-      console.log @model.get 'tracks'
+      @$el.html @model.get 'title'
       for track in @model.get 'tracks'
-        @$el.append JSON.stringify(track)
+        @$el.append "<div>#{track.streaming_url}</div>"
       return this
 
   # Instances
 
   # Tycho - Dive
   # 3619628392
-  appView = new AppView (new Playlist)
+
+  # Chrome sparks - sparks ep
+  # 1546934218
+
+  appView = new AppView
