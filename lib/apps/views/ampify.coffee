@@ -37,7 +37,7 @@ $ ->
     addAlbum: (album) ->
       view = new AlbumView {model: album}
       @$el.append view.render().el
-      
+
   AlbumView = Backbone.View.extend
     initialize: ->
       @listenTo @model, 'change', @render
@@ -46,8 +46,24 @@ $ ->
     render: ->
       @$el.html @model.get 'title'
       for track in @model.get 'tracks'
-        @$el.append "<div>#{track.streaming_url}</div>"
+        tm = new Track track
+        tv = new TrackView {model: tm}
+        @$el.append tv.render().el
       return this
+
+  TrackView = Backbone.View.extend
+    initialize: ->
+      @listenTo @model, 'change', @render
+
+    events: ->
+      dblclick: 'playTrack'
+
+    render: ->
+      @$el.html "<div>#{@model.get 'title'}</div>"
+      return this
+
+    playTrack: ->
+      console.log 'playing', @model.get 'title'
 
   # Instances
 
