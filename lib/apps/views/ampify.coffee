@@ -1,55 +1,91 @@
 $ ->
+
+  # ###
+  # Models and Collections
+  # ###
   Track = Backbone.Model
   
   Album = Backbone.Model.extend
     defaults:
       tracks: []
 
-  Playlist = Backbone.Collection.extend  
+  AlbumCollection = Backbone.Collection.extend  
     url: '/album'
     model: Album
 
-  # views
+  Playlist = Backbone.Collection.extend  
+    url: '/playlist'
+    model: Track
+
+
+
+
+  
+  # ###
+  # Views
+  # ###
   AppView = Backbone.View.extend 
-    el: $ '#ampify'
+    el: $ '#albums'
 
     initialize: () ->
-      @collection = new Playlist
+      @collection = new AlbumCollection
       @listenTo @collection, 'add', @addAlbum
+      @listenTo @collection, 'change', @albumUpdate
+
+      @playlist = new Playlist
 
       @render()
       
       @collection.add [
         new Album
-          id: 3619628392
+          id: 3619628392 # Tycho - Dive
       ]
       
       @collection.add [
         new Album
-          id: 1546934218
+          id: 1546934218 # Chrome sparks - sparks ep
       ]
 
 
     render: ->
-      @$el.html 'waiting for album'
+      playlistView = new PlaylistView {collection: @playlist}
       return this
 
     addAlbum: (album) ->
-      view = new AlbumView {model: album}
-      @$el.append view.render().el
+      album.fetch()
+      albumView = new AlbumView {model: album}
+      @$el.append albumView.render().el
+
+    albumUpdate: (album) ->
+      for track in album.get 'tracks'
+        tm = new Track track
+        @playlist.add tm
+  
+
+
+  PlaylistView = Backbone.View.extend
+    el: '#playlist'
+
+    initialize: ->
+      @listenTo @collection, 'add', @addTrack
+
+    addTrack: (track) ->
+      console.log 'new track', track
+      trackView = new TrackView {model: track}
+      @$el.append trackView.render().el
+      return this
+
+
 
   AlbumView = Backbone.View.extend
     initialize: ->
       @listenTo @model, 'change', @render
-      @model.fetch()
 
     render: ->
       @$el.html @model.get 'title'
-      for track in @model.get 'tracks'
-        tm = new Track track
-        tv = new TrackView {model: tm}
-        @$el.append tv.render().el
       return this
+
+
 
   TrackView = Backbone.View.extend
     initialize: ->
@@ -65,12 +101,6 @@ $ ->
     playTrack: ->
       console.log 'playing', @model.get 'title'
 
-  # Instances
 
-  # Tycho - Dive
-  # 3619628392
-
-  # Chrome sparks - sparks ep
-  # 1546934218
-
+  # KICK IT OFF!
   appView = new AppView
