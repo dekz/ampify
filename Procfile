@@ -1,1 +1,1 @@
-web: bundle exec ruby lib/apps/ampify.rb -p 4567
+web: bundle exec ruby lib/apps/ampify.rb -p 5000
