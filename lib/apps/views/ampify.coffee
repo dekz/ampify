@@ -4,6 +4,8 @@ $ ->
   # Models and Collections
   # ###
   Track = Backbone.Model
+
+  Player = Backbone.Model
   
   Album = Backbone.Model.extend
     defaults:
@@ -18,7 +20,7 @@ $ ->
     model: Track
 
 
-
+ # --------------------------------------------------------------------
 
   
   # ###
@@ -32,7 +34,7 @@ $ ->
       @listenTo @collection, 'add', @addAlbum
       @listenTo @collection, 'change', @albumUpdate
 
-      @playlist = new Playlist
+      
 
       @render()
       
@@ -48,7 +50,6 @@ $ ->
 
 
     render: ->
-      playlistView = new PlaylistView {collection: @playlist}
       return this
 
     addAlbum: (album) ->
@@ -59,8 +60,31 @@ $ ->
     albumUpdate: (album) ->
       for track in album.get 'tracks'
         tm = new Track track
-        @playlist.add tm
+        playlist.add tm
   
+
+  AlbumView = Backbone.View.extend
+    initialize: ->
+      @listenTo @model, 'change', @render
+
+    render: ->
+      @$el.html @model.get 'title'
+      return this
+
+
+  # ----------------------------------------------------------------
+
+
+  PlayerView = Backbone.View.extend
+    el: '#player'
+
+    initialize: ->
+      @listenTo @collection, 'change:playing', @changeTrack
+
+    changeTrack: (track) ->
+      console.log track
+      # @attributes doesn't work for some reason
+      @el.src = track.get 'streaming_url'
 
 
   PlaylistView = Backbone.View.extend
@@ -76,17 +100,6 @@ $ ->
       return this
 
 
-
-  AlbumView = Backbone.View.extend
-    initialize: ->
-      @listenTo @model, 'change', @render
-
-    render: ->
-      @$el.html @model.get 'title'
-      return this
-
-
-
   TrackView = Backbone.View.extend
     initialize: ->
       @listenTo @model, 'change', @render
@@ -99,8 +112,15 @@ $ ->
       return this
 
     playTrack: ->
-      console.log 'playing', @model.get 'title'
+      # console.log 'playing', @model.get 'title'
+      @model.set 'playing', true
 
+
+  # ---------------------------------------------------------------------
 
   # KICK IT OFF!
   appView = new AppView
+  
+  playlist = new Playlist
+  playerView = new PlayerView {collection: playlist}
+  playlistView = new PlaylistView {collection: playlist}
