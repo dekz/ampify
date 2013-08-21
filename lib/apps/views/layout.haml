@@ -10,8 +10,7 @@
     / %link{'href' => "/css/styles.css", 'rel' =>"stylesheet", 'type' => 'text/css'}
   
   %body
-    %div{:id =>'ampify'}
-      = yield
+    = yield
 
     / JS
     / %script{:src => '/js/zepto.min.js'}
@@ -21,5 +20,17 @@
     %script{:src => '/js/jquery.js'}
     %script{:src => '/js/underscore.js'}
     %script{:src => '/js/backbone.js'}
+    %script{:src => '/js/bootstrap-transition.js'}
+    %script{:src => '/js/bootstrap-alert.js'}
+    %script{:src => '/js/bootstrap-modal.js'}
+    %script{:src => '/js/bootstrap-dropdown.js'}
+    %script{:src => '/js/bootstrap-scrollspy.js'}
+    %script{:src => '/js/bootstrap-tab.js'}
+    %script{:src => '/js/bootstrap-tooltip.js'}
+    %script{:src => '/js/bootstrap-popover.js'}
+    %script{:src => '/js/bootstrap-button.js'}
+    %script{:src => '/js/bootstrap-collapse.js'}
+    %script{:src => '/js/bootstrap-carousel.js'}
+    %script{:src => '/js/bootstrap-typeahead.js'}
+
     %script{:src => '/js/ampify.js'}
-  
