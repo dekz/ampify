@@ -1,4 +1,8 @@
 $ ->
+  _.templateSettings =
+    evaluate:    /\{\{#([\s\S]+?)\}\}/g,
+    interpolate: /\{\{[^#\{]([\s\S]+?)[^\}]\}\}/g,
+    escape:      /\{\{\{([\s\S]+?)\}\}\}/g,
 
   # ###
   # Models and Collections
@@ -104,11 +108,14 @@ $ ->
     initialize: ->
       @listenTo @model, 'change', @render
 
+    template: _.template('<div>{{ title }}</div>')
+    
     events: ->
       dblclick: 'playTrack'
 
     render: ->
-      @$el.html "<div>#{@model.get 'title'}</div>"
+      # @$el.html "<div>#{@model.get 'title'}</div>"
+      @$el.html @template(@model.attributes)
       return this
 
     playTrack: ->

@@ -1,0 +1,27 @@
+/*Key Pieces*/
+
+#ampify {
+  padding-top: 60px;
+}
+
+#player {
+  display: none;
+}
+
+/*Classes*/
+
+.currently-playing {
+  font-size: 2em;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.player-controls {
+  width: 100%;
+  text-align: center;
+}
+
+.player-icon {
+  padding: 10px;
+}

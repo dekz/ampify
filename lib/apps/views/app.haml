@@ -11,7 +11,15 @@
 
 %div.container{:id => 'ampify'}
   %audio{:id => 'player', :src => '', :preload => 'metadata', :controls => 'controls', :autoplay => ''}
-  
+
+  %div.currently-playing Waiting for a track...
+  %div.player-controls
+    %i.player-icon.icon-3x.icon-backward
+    %i.player-icon.icon-3x.icon-play
+    %i.player-icon.icon-3x.icon-pause
+    %i.player-icon.icon-3x.icon-stop
+    %i.player-icon.icon-3x.icon-forward
+    
   %h3 Albums:
   %div#albums
 
