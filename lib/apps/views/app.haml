@@ -1,14 +1,13 @@
 %div.navbar.navbar-inverse.navbar-fixed-top
-  %div.navbar-inner
-    %div.container
-      %a.brand Ampify
-      %ul.nav
-        %li.active 
-          %a One
-        %li 
-          %a Two
-        %li
-          %a Three
+  %div.navbar-header
+    %a.navbar-brand Ampify
+    %ul.nav.navbar-nav
+      %li.active 
+        %a One
+      %li 
+        %a Two
+      %li
+        %a Three
 
 %div.container{:id => 'ampify'}
   %audio{:id => 'player', :src => '', :preload => 'metadata', :controls => 'controls', :autoplay => ''}
