@@ -7,18 +7,18 @@
       %li 
         %a Two
       %li
-        %a Three
+        %li Three
 
 %div.container{:id => 'ampify'}
-  %audio{:id => 'player', :src => '', :preload => 'metadata', :controls => 'controls', :autoplay => ''}
+  %div{:id => 'player'}
+    %audio{:id => 'audioPlayer', :src => '', :preload => 'metadata', :controls => 'controls', :autoplay => ''}
 
-  %div.currently-playing Waiting for a track...
-  %div.player-controls
-    %i.player-icon.icon-3x.icon-backward
-    %i.player-icon.icon-3x.icon-play
-    %i.player-icon.icon-3x.icon-pause
-    %i.player-icon.icon-3x.icon-stop
-    %i.player-icon.icon-3x.icon-forward
+    %div.currently-playing Waiting for a track...
+    %div.player-controls
+      %i.player-icon.icon-3x.icon-backward{:id => 'backBtn'}
+      %i.player-icon.icon-3x.icon-play{:id => 'playPauseBtn'}
+      %i.player-icon.icon-3x.icon-stop{:id => 'stopBtn'}
+      %i.player-icon.icon-3x.icon-forward{:id => 'forwardBtn'}
     
   %h3 Albums:
   %div#albums

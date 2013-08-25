@@ -85,10 +85,32 @@ $ ->
     initialize: ->
       @listenTo @collection, 'change:playing', @changeTrack
 
+      @player = @$('#audioPlayer')[0]
+      @playPauseBtn = @$ '#playPauseBtn'
+      @backBtn = @$ '#backBtn'
+      @stopBtn = @$ '#stopBtn'
+      @forwardBtn = @$ '#forwardBtn'
+
+      window.player = @player
+
+    events: ->
+      'click #playPauseBtn': 'playPause'
+
     changeTrack: (track) ->
-      console.log track
       # @attributes doesn't work for some reason
-      @el.src = track.get 'streaming_url'
+      @player.src = track.get 'streaming_url'
+
+    playPause: ->
+      @playPauseBtn.toggleClass('icon-play')
+      @playPauseBtn.toggleClass('icon-pause')
+
+      if @player.paused
+        @player.play()
+      else
+        @player.pause()
+
+
+  
 
 
   PlaylistView = Backbone.View.extend
