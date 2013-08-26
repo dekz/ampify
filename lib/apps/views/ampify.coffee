@@ -1,13 +1,17 @@
 $ ->
-  _.templateSettings =
-    evaluate:    /\{\{#([\s\S]+?)\}\}/g,
-    interpolate: /\{\{[^#\{]([\s\S]+?)[^\}]\}\}/g,
-    escape:      /\{\{\{([\s\S]+?)\}\}\}/g,
+  # _.templateSettings =
+  #   evaluate:    /\{\{#([\s\S]+?)\}\}/g, # {{# console.log("blah") }}
+  #   interpolate: /\{\{[^#\{]([\s\S]+?)[^\}]\}\}/g, # {{ title }}
+  #   escape:      /\{\{\{([\s\S]+?)\}\}\}/g, # {{{ title }}}
+
+  # Actual Mustache is defined.
 
   # ###
   # Models and Collections
   # ###
-  Track = Backbone.Model
+  Track = Backbone.Model.extend
+    defaults:
+      artist: 'artistName'
 
   Player = Backbone.Model
   
@@ -39,7 +43,6 @@ $ ->
       @listenTo @collection, 'change', @albumUpdate
 
       
-
       @render()
       
       @collection.add [
@@ -62,6 +65,7 @@ $ ->
       @$el.append albumView.render().el
 
     albumUpdate: (album) ->
+      console.log album.toJSON()
       for track in album.get 'tracks'
         tm = new Track track
         playlist.add tm
@@ -90,6 +94,7 @@ $ ->
       @backBtn = @$ '#backBtn'
       @stopBtn = @$ '#stopBtn'
       @forwardBtn = @$ '#forwardBtn'
+      @currentlyPlaying = @$ '#currentlyPlaying'
 
       window.player = @player
 
@@ -98,7 +103,9 @@ $ ->
 
     changeTrack: (track) ->
       # @attributes doesn't work for some reason
+      console.log track.toJSON()
       @player.src = track.get 'streaming_url'
+      @currentlyPlaying.text track.get 'title'
 
     playPause: ->
       @playPauseBtn.toggleClass('icon-play')
@@ -129,19 +136,22 @@ $ ->
   TrackView = Backbone.View.extend
     initialize: ->
       @listenTo @model, 'change', @render
-
-    template: _.template('<div>{{ title }}</div>')
     
+    template: """
+      {{#playing }}
+        <span> * </span>
+      {{/playing}}
+      <span> {{title}} </span>
+    """
+
     events: ->
       dblclick: 'playTrack'
 
     render: ->
-      # @$el.html "<div>#{@model.get 'title'}</div>"
-      @$el.html @template(@model.attributes)
+      @$el.html Mustache.render(@template, @model.attributes)
       return this
 
     playTrack: ->
-      # console.log 'playing', @model.get 'title'
       @model.set 'playing', true
 
 

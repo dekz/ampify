@@ -4,18 +4,14 @@
   padding-top: 60px;
 }
 
-/*#audioPlayer {
-  display: none;
-*/}
-
-/*Classes*/
-
-.currently-playing {
+#currentlyPlaying {
   font-size: 2em;
   width: 100%;
   text-align: center;
   padding: 10px;
 }
+
+/*Classes*/
 
 .player-controls {
   width: 100%;
