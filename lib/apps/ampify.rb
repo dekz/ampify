@@ -24,17 +24,20 @@ helpers do
     unless ours
       if query[:band_id]
         logger.debug "performing bandcmap api lookup on #{query[:band_id]}"
+
         result = Bandcamp.get.band query[:band_id]
         disco = Bandcamp.get.discography query[:band_id]
         ours = Band.create(:name => result.name , :band_id => result.band_id , :url => result.url)
+
         ours.albums = disco.albums.map do |da|
           album = Bandcamp.get.album da.album_id
           a = Album.create(:band => ours, :title => album.title, :artist => da.artist,
                        :album_id => album.album_id, :release_date => album.release_date,)
           a.tracks = album.tracks.map do |t|
-                       Track.create(:title => t.title, :album_id => a.album_id)
-                     end
-          pry binding
+            Track.create(:title => t.title, :album_id => a.album_id, :duration => t.duration)
+          end
+
+          a.save
           a
         end
         ours.save
@@ -86,4 +89,14 @@ get '/search/band/:text' do
   content_type :json
   results = Bandcamp.search params[:text]
   results.map { |r| r.to_json }
+end
+
+get '/search/all/:text' do
+  content_type :json
+  result = {}
+  text = params[:text]
+  result[:albums] = Album.all(:title => text)
+  result[:bands] = Band.all(:name => text)
+  result[:tracks] = Track.all(:title => text)
+  result.to_json
 end

@@ -14,7 +14,8 @@ class Track
   include DataMapper::Resource
 
   property :id,         Serial
-  property :title,       String
+  property :title,      String
+  property :duration,   String
   property :created_at, DateTime
   belongs_to :album
 end
@@ -22,12 +23,12 @@ end
 class Album
   include DataMapper::Resource
 
-  property :id,         Serial
-  property :album_id,   String
-  property :title,       String
+  property :id,           Serial
+  property :album_id,     String
+  property :title,        String
   property :artist,       String
   property :release_date, String
-  property :created_at, DateTime
+  property :created_at,   DateTime
   has n, :tracks
   belongs_to :band
 end
