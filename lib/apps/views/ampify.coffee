@@ -101,20 +101,24 @@ $ ->
     events: ->
       'click #playPauseBtn': 'playPause'
 
+    togglePlay: ->
+      @playPauseBtn.toggleClass('icon-play')
+      @playPauseBtn.toggleClass('icon-pause')
+
     changeTrack: (track) ->
       # @attributes doesn't work for some reason
       console.log track.toJSON()
       @player.src = track.get 'streaming_url'
       @currentlyPlaying.text track.get 'title'
+      @togglePlay()
 
     playPause: ->
-      @playPauseBtn.toggleClass('icon-play')
-      @playPauseBtn.toggleClass('icon-pause')
-
       if @player.paused
         @player.play()
       else
         @player.pause()
+      @togglePlay()
+
 
 
 
