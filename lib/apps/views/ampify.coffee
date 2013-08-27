@@ -153,7 +153,7 @@ $ ->
 
     template: """
       {{#playing }}
-        <span> * </span>
+        <span> <i class="player-icon icon icon-play"/></i>  </span>
       {{/playing}}
       <span> {{title}} </span>
     """
