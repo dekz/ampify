@@ -25,8 +25,22 @@ $ ->
 
   Playlist = Backbone.Collection.extend  
     url: '/playlist'
+    comparator: 'album_id'
     model: Track
 
+    nextTrack: (track) ->
+      next = @at(@indexOf(track) + 1)
+      if next
+        return next
+      else
+        return @first()
+
+    prevTrack: (track) ->
+      prev = @at(@indexOf(track) - 1)
+      if prev
+        return prev
+      else
+        return @last()
 
  # --------------------------------------------------------------------
 
@@ -94,9 +108,9 @@ $ ->
 
       @player = @$('#audioPlayer')[0]
       @playPauseBtn = @$ '#playPauseBtn'
-      @backBtn = @$ '#backBtn'
+      @prevBtn = @$ '#prevBtn'
       @stopBtn = @$ '#stopBtn'
-      @forwardBtn = @$ '#forwardBtn'
+      @nextBtn = @$ '#nextBtn'
       @currentlyPlaying = @$ '#currentlyPlaying'
       @previous = []
 
@@ -104,6 +118,14 @@ $ ->
 
     events: ->
       'click #playPauseBtn': 'playPause'
+      'click #nextBtn': 'nextTrack'
+      'click #prevBtn': 'prevTrack'
+
+    trackReady: ->
+      unless @currentTrack
+        @collection.first().set 'playing', true
+        return false
+      return true
 
     togglePlay: ->
       if @player.paused
@@ -115,24 +137,31 @@ $ ->
 
     changeTrack: (track) ->
       prev = _.last(@previous)
-      prev.set('playing', false) if prev?
-      @previous.push track
+      
+      if prev?
+        prev.set('playing', false)
 
-      # @attributes doesn't work for some reason
-      console.log track.toJSON()
+      @previous.push track
+      @currentTrack = track
+
       @player.src = track.get 'streaming_url'
       @currentlyPlaying.text track.get 'title'
       @player.play()
       @togglePlay()
 
     playPause: ->
-      if @player.paused
-        @player.play()
-      else
-        @player.pause()
-      @togglePlay()
+      if @trackReady()
+        if @player.paused
+          @player.play()
+        else
+          @player.pause()
+        @togglePlay()
 
+    nextTrack: ->
+      @collection.nextTrack(@currentTrack).set 'playing', true
 
+    prevTrack: ->
+      @collection.prevTrack(@currentTrack).set 'playing', true
 
 
 
@@ -141,12 +170,18 @@ $ ->
     el: '#playlist'
 
     initialize: ->
-      @listenTo @collection, 'add', @addTrack
+      @listenTo @collection, 'add', @render
+    
+    render: ->
+      # makes it so only one redraw occurs per add
+      @$el.empty()
+      container = document.createDocumentFragment()
 
-    addTrack: (track) ->
-      console.log 'new track', track
-      trackView = new TrackView {model: track}
-      @$el.append trackView.render().el
+      @collection.each (track) ->
+        trackView = new TrackView {model: track}
+        container.appendChild trackView.render().el
+
+      @$el.append container
       return this
 
 
@@ -177,6 +212,6 @@ $ ->
   # KICK IT OFF!
   appView = new AppView
 
-  playlist = new Playlist
+  window.playlist = playlist = new Playlist
   playerView = new PlayerView {collection: playlist}
   playlistView = new PlaylistView {collection: playlist}
