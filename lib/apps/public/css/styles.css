@@ -8,7 +8,13 @@
   font-size: 2em;
   width: 100%;
   text-align: center;
-  padding: 10px;
+  margin: 10px;
+}
+
+#search {
+  margin: 20px 0;
+  height: 2em;
+  font-size: 2em
 }
 
 /*Classes*/
