@@ -25,7 +25,6 @@ $ ->
 
   Playlist = Backbone.Collection.extend  
     url: '/playlist'
-    comparator: 'album_id'
     model: Track
 
     nextTrack: (track) ->
