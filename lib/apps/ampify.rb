@@ -95,8 +95,8 @@ get '/search/all/:text' do
   content_type :json
   result = {}
   text = params[:text]
-  result[:albums] = Album.all(:title => text)
-  result[:bands] = Band.all(:name => text)
-  result[:tracks] = Track.all(:title => text)
+  result[:albums] = Album.all(:title.like => text)
+  result[:bands] = Band.all(:name.like => text)
+  result[:tracks] = Track.all(:title.like => text)
   result.to_json
 end

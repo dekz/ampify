@@ -34,5 +34,6 @@ class Album
 end
 
 DataMapper.finalize
-DataMapper.setup(:default, 'sqlite::memory:')
-DataMapper.auto_migrate!
+HOME = File.expand_path(File.join(File.dirname(__FILE__), '../../../'))
+DataMapper.setup(:default, "sqlite3://#{File.join(HOME, "/bandcamp.db")}")
+DataMapper.auto_upgrade!
