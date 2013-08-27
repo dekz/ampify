@@ -4,9 +4,47 @@ require 'bandcamp_api'
 require 'pry'
 require 'haml'
 require 'coffee-script'
+require 'data_mapper'
+require 'dm-sqlite-adapter'
+
+require_relative './models/song'
 
 $sensitive = YAML::load File.read './sensitive.yml'
 Bandcamp.config.api_key = $sensitive[:api_key]
+
+use Rack::Logger
+
+helpers do
+  def logger
+    request.logger
+  end
+
+  def find_band query
+    ours = Band.first query
+    unless ours
+      if query[:band_id]
+        logger.debug "performing bandcmap api lookup on #{query[:band_id]}"
+        result = Bandcamp.get.band query[:band_id]
+        disco = Bandcamp.get.discography query[:band_id]
+        ours = Band.create(:name => result.name , :band_id => result.band_id , :url => result.url)
+        ours.albums = disco.albums.map do |da|
+          album = Bandcamp.get.album da.album_id
+          a = Album.create(:band => ours, :title => album.title, :artist => da.artist,
+                       :album_id => album.album_id, :release_date => album.release_date,)
+          a.tracks = album.tracks.map do |t|
+                       Track.create(:title => t.title, :album_id => a.album_id)
+                     end
+          pry binding
+          a
+        end
+        ours.save
+      else
+        logger.debug "can't find band by #{query}"
+      end
+    end
+    ours
+  end
+end
 
 get '/' do
   haml :app, {
@@ -20,13 +58,15 @@ end
 
 get '/band/:id' do
   content_type :json
-  result = Bandcamp.get.band params[:id]
-  result.to_json
+  band = find_band :band_id => params[:id]
+  band.to_json
 end
 
 get '/band/:id/discography' do
   content_type :json
+  band = find_band :band_id => params[:id]
   result = Bandcamp.get.discography params[:id]
+  pp result
   result.to_json
 end
 
