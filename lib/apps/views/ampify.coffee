@@ -80,6 +80,9 @@ $ ->
       return this
 
 
+  SearchView = Backbone.View.extend
+    el: $ '#search'
+
   # ----------------------------------------------------------------
 
 
