@@ -8,3 +8,6 @@ gem 'pry'
 gem 'foreman'
 gem 'haml'
 gem 'coffee-script'
+
+gem 'datamapper', :require => 'data_mapper'
+gem 'dm-sqlite-adapter'
