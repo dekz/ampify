@@ -14,7 +14,7 @@ $ ->
       artist: 'artistName'
 
   Player = Backbone.Model
-  
+
   Album = Backbone.Model.extend
     defaults:
       tracks: []
@@ -30,7 +30,7 @@ $ ->
 
  # --------------------------------------------------------------------
 
-  
+
   # ###
   # Views
   # ###
@@ -42,14 +42,14 @@ $ ->
       @listenTo @collection, 'add', @addAlbum
       @listenTo @collection, 'change', @albumUpdate
 
-      
+
       @render()
-      
+
       @collection.add [
         new Album
           id: 3619628392 # Tycho - Dive
       ]
-      
+
       @collection.add [
         new Album
           id: 1546934218 # Chrome sparks - sparks ep
@@ -69,7 +69,7 @@ $ ->
       for track in album.get 'tracks'
         tm = new Track track
         playlist.add tm
-  
+
 
   AlbumView = Backbone.View.extend
     initialize: ->
@@ -117,7 +117,7 @@ $ ->
         @player.pause()
 
 
-  
+
 
 
   PlaylistView = Backbone.View.extend
@@ -136,7 +136,7 @@ $ ->
   TrackView = Backbone.View.extend
     initialize: ->
       @listenTo @model, 'change', @render
-    
+
     template: """
       {{#playing }}
         <span> * </span>
@@ -159,7 +159,7 @@ $ ->
 
   # KICK IT OFF!
   appView = new AppView
-  
+
   playlist = new Playlist
   playerView = new PlayerView {collection: playlist}
   playlistView = new PlaylistView {collection: playlist}
