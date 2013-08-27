@@ -98,6 +98,7 @@ $ ->
       @stopBtn = @$ '#stopBtn'
       @forwardBtn = @$ '#forwardBtn'
       @currentlyPlaying = @$ '#currentlyPlaying'
+      @previous = []
 
       window.player = @player
 
@@ -113,6 +114,10 @@ $ ->
         @playPauseBtn.addClass('icon-pause')
 
     changeTrack: (track) ->
+      prev = _.last(@previous)
+      prev.set('playing', false) if prev?
+      @previous.push track
+
       # @attributes doesn't work for some reason
       console.log track.toJSON()
       @player.src = track.get 'streaming_url'
@@ -151,7 +156,7 @@ $ ->
 
     template: """
       {{#playing }}
-        <span> * </span>
+        <span> <i class="player-icon icon icon-play"/></i>  </span>
       {{/playing}}
       <span> {{title}} </span>
     """
