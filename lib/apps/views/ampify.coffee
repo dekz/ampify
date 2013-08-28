@@ -55,6 +55,8 @@ $ ->
       @listenTo @collection, 'add', @addAlbum
       @listenTo @collection, 'change', @albumUpdate
 
+      @searchView = new SearchView
+
 
       @render()
 
@@ -96,6 +98,22 @@ $ ->
   SearchView = Backbone.View.extend
     el: $ '#search'
 
+    initialize: ->
+      @$el.typeahead {
+        name: 'ampify'
+        local: [
+          'yeah'
+          'what'
+          'okay'
+        ]
+      }
+
+    events:
+      change: 'search'
+
+    search: ->
+      console.log @$el.val()
+
   # ----------------------------------------------------------------
 
 
@@ -115,7 +133,7 @@ $ ->
 
       window.player = @player
 
-    events: ->
+    events:
       'click #playPauseBtn': 'playPause'
       'click #nextBtn': 'nextTrack'
       'click #prevBtn': 'prevTrack'
@@ -190,7 +208,7 @@ $ ->
 
     template: """
       {{#playing }}
-        <span> <i class="player-icon icon icon-play"/></i>  </span>
+        <i class="icon-music"/>
       {{/playing}}
       <span> {{title}} </span>
     """
