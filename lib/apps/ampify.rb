@@ -19,28 +19,51 @@ helpers do
     request.logger
   end
 
+  def populate_band band_id
+    result = Bandcamp.get.band band_id
+    disco = Bandcamp.get.discography band_id
+    ours = Band.create(:name => result.name , :band_id => result.band_id , :url => result.url)
+
+    albums = []
+    disco.albums.each do |da|
+      next unless da.respond_to? :album_id
+      album = Bandcamp.get.album da.album_id
+      a = Album.create(:band => ours, :title => album.title, :artist => da.artist,
+                       :album_id => da.album_id, :release_date => album.release_date)
+      a.tracks = album.tracks.map do |t|
+        track = Track.create(:title => t.title, :album => a, :duration => t.duration)
+        if t.respond_to? :streaming_url
+          track.streaming_url = t.streaming_url
+        end
+        track.save
+        track
+      end
+      a.save
+      a
+    end
+    ours.albums = albums
+    ours.save
+    ours
+  end
+
+  def find_album query
+    ours = Album.first query
+    unless ours
+      if query[:album_id]
+        album = Bandcamp.get.album query[:album_id]
+        band = find_band :band_id => album.band_id
+        ours = Album.first :album_id => album.album_id
+      end
+    end
+    ours
+  end
+
   def find_band query
     ours = Band.first query
     unless ours
       if query[:band_id]
         logger.debug "performing bandcmap api lookup on #{query[:band_id]}"
-
-        result = Bandcamp.get.band query[:band_id]
-        disco = Bandcamp.get.discography query[:band_id]
-        ours = Band.create(:name => result.name , :band_id => result.band_id , :url => result.url)
-
-        ours.albums = disco.albums.map do |da|
-          album = Bandcamp.get.album da.album_id
-          a = Album.create(:band => ours, :title => album.title, :artist => da.artist,
-                       :album_id => album.album_id, :release_date => album.release_date,)
-          a.tracks = album.tracks.map do |t|
-            Track.create(:title => t.title, :album_id => a.album_id, :duration => t.duration)
-          end
-
-          a.save
-          a
-        end
-        ours.save
+        ours = populate_band query[:band_id]
       else
         logger.debug "can't find band by #{query}"
       end
@@ -81,8 +104,8 @@ end
 
 get '/album/:id' do
   content_type :json
-  result = Bandcamp.get.album params[:id]
-  result.to_json
+  result = find_album :album_id => params[:id]
+  result.to_json(:methods => [:tracks])
 end
 
 get '/search/band/:text' do

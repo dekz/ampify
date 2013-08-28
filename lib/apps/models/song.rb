@@ -16,6 +16,7 @@ class Track
   property :id,         Serial
   property :title,      String
   property :duration,   String
+  property :streaming_url,   String, :length => 150
   property :created_at, DateTime
   belongs_to :album
 end
