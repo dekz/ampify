@@ -19,11 +19,21 @@ $ ->
     defaults:
       tracks: []
 
-  AlbumCollection = Backbone.Collection.extend  
+  Search = Backbone.Model.extend
+    defaults:
+      bands: []
+      albums: []
+      tracks: []
+      query: ''
+
+    url: () ->
+      return "/search/all/#{@get 'query'}"
+
+  AlbumCollection = Backbone.Collection.extend
     url: '/album'
     model: Album
 
-  Playlist = Backbone.Collection.extend  
+  Playlist = Backbone.Collection.extend
     url: '/playlist'
     model: Track
 
@@ -111,8 +121,15 @@ $ ->
     events:
       change: 'search'
 
+    renderResults: (search) ->
+      for type in ['albums', 'bands', 'tracks']
+        console.log type
+        console.log search.get type
+
     search: ->
-      console.log @$el.val()
+      s = new Search({ query: @$el.val() })
+      @listenTo s, 'change', @renderResults
+      s.fetch()
 
   # ----------------------------------------------------------------
 
@@ -188,7 +205,7 @@ $ ->
 
     initialize: ->
       @listenTo @collection, 'add', @render
-    
+
     render: ->
       # makes it so only one redraw occurs per add
       @$el.empty()
