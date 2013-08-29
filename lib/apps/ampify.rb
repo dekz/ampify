@@ -33,7 +33,6 @@ helpers do
                        :album_id => da.album_id, :release_date => album.release_date)
       a.tracks = album.tracks.map do |t|
         track = Track.create(:title => t.title, :album => a, :duration => t.duration)
-        p track
         if t.respond_to? :streaming_url
           track.streaming_url = t.streaming_url
         end
@@ -148,7 +147,6 @@ delete '/playlist/:id/:track_id' do
   content_type :json
   result = Playlist.first(:id => params[:id])
   result.tracks = result.tracks.delete_if { |t| t.id == Integer(params[:track_id]) }
-  p result.tracks
   result.save
 end
 
