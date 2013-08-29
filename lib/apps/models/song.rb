@@ -41,6 +41,7 @@ class Playlist
   has n, :tracks, :through => Resource
 end
 
+#DataMapper::Logger.new($stdout, :debug)
 DataMapper.finalize
 HOME = File.expand_path(File.join(File.dirname(__FILE__), '../../../'))
 DataMapper.setup(:default, "sqlite3://#{File.join(HOME, "/bandcamp.db")}")
