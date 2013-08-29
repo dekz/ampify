@@ -74,9 +74,7 @@ helpers do
 end
 
 get '/' do
-  haml :app, {
-    :layout => :layout
-  }
+  haml :app, { :layout => :layout }
 end
 
 get '/js/ampify.js' do
@@ -93,7 +91,6 @@ get '/band/:id/discography' do
   content_type :json
   band = find_band :band_id => params[:id]
   result = Bandcamp.get.discography params[:id]
-  pp result
   result.to_json
 end
 
@@ -111,17 +108,17 @@ end
 
 get '/search/band/:text' do
   content_type :json
-  results = Bandcamp.search params[:text]
-  results.map { |r| r.to_json }
+  Band.all(:name.like => params[:text]).to_json
 end
 
 get '/search/all/:text' do
   content_type :json
-  result = {}
   text = params[:text]
-  result[:albums] = Album.all(:title.like => text)
-  result[:bands] = Band.all(:name.like => text)
-  result[:tracks] = Track.all(:title.like => text)
+  result = {
+    :albums => Album.all(:title.like => text),
+    :bands => Band.all(:name.like => text),
+    :tracks => Track.all(:title.like => text)
+  }
   result.to_json
 end
 
@@ -143,6 +140,18 @@ post '/playlist/:id' do
   result.to_json
 end
 
+post '/playlist' do
+  content_type :json
+  result = Playlist.create
+  tracks = JSON::parse(request.body.read)
+  tracks.each do |id|
+    track = Track.first(:id => id)
+    result.tracks << track if track
+  end
+  result.save
+  result.to_json
+end
+
 delete '/playlist/:id/:track_id' do
   content_type :json
   result = Playlist.first(:id => params[:id])
@@ -156,14 +165,3 @@ delete '/playlist/:id' do
   result.destroy
 end
 
-post '/playlist' do
-  content_type :json
-  result = Playlist.create
-  tracks = JSON::parse(request.body.read)
-  tracks.each do |id|
-    track = Track.first(:id => id)
-    result.tracks << track if track
-  end
-  result.save
-  result.to_json
-end
