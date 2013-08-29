@@ -13,7 +13,7 @@ end
 class Track
   include DataMapper::Resource
 
-  property :id,         Serial
+  property :id,         Serial, :key => true
   property :title,      String
   property :duration,   String
   property :streaming_url,   String, :length => 150
@@ -32,6 +32,13 @@ class Album
   property :created_at,   DateTime
   has n, :tracks
   belongs_to :band
+end
+
+class Playlist
+  include DataMapper::Resource
+  property :id, Serial
+  property :created_at, DateTime
+  has n, :tracks, :through => Resource
 end
 
 DataMapper.finalize

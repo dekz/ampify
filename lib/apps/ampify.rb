@@ -6,6 +6,7 @@ require 'haml'
 require 'coffee-script'
 require 'data_mapper'
 require 'dm-sqlite-adapter'
+require 'json'
 
 require_relative './models/song'
 
@@ -32,6 +33,7 @@ helpers do
                        :album_id => da.album_id, :release_date => album.release_date)
       a.tracks = album.tracks.map do |t|
         track = Track.create(:title => t.title, :album => a, :duration => t.duration)
+        p track
         if t.respond_to? :streaming_url
           track.streaming_url = t.streaming_url
         end
@@ -121,5 +123,34 @@ get '/search/all/:text' do
   result[:albums] = Album.all(:title.like => text)
   result[:bands] = Band.all(:name.like => text)
   result[:tracks] = Track.all(:title.like => text)
+  result.to_json
+end
+
+get '/playlist/:id' do
+  content_type :json
+  result = Playlist.first(:id => params[:id])
+  result.to_json(:methods => [:tracks])
+end
+
+post '/playlist/:id' do
+  content_type :json
+  result = Playlist.first(:id => params[:id])
+  tracks = JSON::parse(request.body.read)
+  tracks.each do |id|
+    p id
+    result.tracks << Track.first(:id => id)
+  end
+  result.save
+  result.to_json
+end
+
+post '/playlist' do
+  content_type :json
+  result = Playlist.create
+  tracks = JSON::parse(request.body.read)
+  tracks.each do |id|
+    result.tracks << Track.first(:id => id)
+  end
+  result.save
   result.to_json
 end
