@@ -1,1 +1,1 @@
-web: bundle exec ruby lib/apps/ampify.rb -p 5000
+web: bundle exec thin start -p 5000
