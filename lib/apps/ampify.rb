@@ -144,6 +144,20 @@ post '/playlist/:id' do
   result.to_json
 end
 
+delete '/playlist/:id/:track_id' do
+  content_type :json
+  result = Playlist.first(:id => params[:id])
+  result.tracks = result.tracks.delete_if { |t| t.id == Integer(params[:track_id]) }
+  p result.tracks
+  result.save
+end
+
+delete '/playlist/:id' do
+  content_type :json
+  result = Playlist.first(:id => params[:id])
+  result.destroy
+end
+
 post '/playlist' do
   content_type :json
   result = Playlist.create
