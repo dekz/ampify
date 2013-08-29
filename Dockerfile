@@ -17,7 +17,9 @@ RUN apt-get install -y -q make
 RUN apt-get install -y -q wget
 RUN apt-get install -y -q build-essential
 RUN apt-get install -y -q g++
+RUN apt-get install -y -q libssl-dev
 
+RUN apt-get install -y -q sqlite3
 RUN apt-get install -y -q memcached
 RUN apt-get install -y -q redis-server
 
@@ -37,5 +39,3 @@ RUN rbenv install 2.0.0-p247
 RUN rbenv rehash
 RUN rbenv global 2.0.0-p247
 RUN gem install bundler
-RUN gem install passenger
-RUN gem install passenger-install-nginx-module
