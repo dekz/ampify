@@ -135,10 +135,10 @@ end
 post '/playlist/:id' do
   content_type :json
   result = Playlist.first(:id => params[:id])
-  tracks = JSON::parse(request.body.read)
-  tracks.each do |id|
-    p id
-    result.tracks << Track.first(:id => id)
+  body = request.body.read
+  if body
+    tracks = JSON::parse body
+    tracks.each { |id| result.tracks << Track.first(:id => id) }
   end
   result.save
   result.to_json
@@ -149,7 +149,8 @@ post '/playlist' do
   result = Playlist.create
   tracks = JSON::parse(request.body.read)
   tracks.each do |id|
-    result.tracks << Track.first(:id => id)
+    track = Track.first(:id => id)
+    result.tracks << track if track
   end
   result.save
   result.to_json
