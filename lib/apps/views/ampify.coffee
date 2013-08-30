@@ -45,7 +45,7 @@ $ ->
            when 'artist' then clazz = Artist
            when 'tracks' then clazz = Track
          me[type] = _(value).map (v) ->
-            new clazz v
+           new clazz v
       me
 
   AlbumCollection = Backbone.Collection.extend
