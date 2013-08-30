@@ -8,11 +8,14 @@
   display: none;
 }
 
+#player {
+  -webkit-user-select: none;
+}
+
 #currentlyPlaying {
   font-size: 2em;
-  width: 100%;
-  text-align: center;
   margin: 10px;
+  color: white;
 }
 
 #search {
@@ -26,6 +29,7 @@
 .player-controls {
   width: 100%;
   text-align: center;
+  color: white
 }
 
 .player-icon {

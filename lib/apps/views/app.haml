@@ -4,20 +4,20 @@
     %ul.nav.navbar-nav
       %li.active
         %a One
+  %ul.navbar-right
+    %div{id: 'player'}
+      %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
+
+      %span{id: 'currentlyPlaying'}
+
+      %span.player-controls
+        %i.player-icon.icon-3x.icon-backward{id: 'prevBtn'}
+        %i.player-icon.icon-3x.icon-play{id: 'playPauseBtn'}
+        %i.player-icon.icon-3x.icon-stop{id: 'stopBtn'}
+        %i.player-icon.icon-3x.icon-forward{id: 'nextBtn'}
 
 %div.container{id: 'ampify'}
-  %div{id: 'player'}
-    %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
-
-    %div{id: 'currentlyPlaying'}
-
-    %div.player-controls
-      %i.player-icon.icon-3x.icon-backward{id: 'prevBtn'}
-      %i.player-icon.icon-3x.icon-play{id: 'playPauseBtn'}
-      %i.player-icon.icon-3x.icon-stop{id: 'stopBtn'}
-      %i.player-icon.icon-3x.icon-forward{id: 'nextBtn'}
-
-    %input.form-control{id: 'search', type: 'text', placeholder: 'Search'}
+  %input.form-control{id: 'search', type: 'text', placeholder: 'Search'}
 
   %h3 Albums in your playlist:
   %div#albums
