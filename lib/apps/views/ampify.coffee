@@ -15,6 +15,12 @@ $ ->
 
   Player = Backbone.Model
 
+  Band = Backbone.Model.extend
+    defaults:
+      band_id: ''
+      name: ''
+      url: ''
+
   Album = Backbone.Model.extend
     defaults:
       tracks: []
@@ -28,6 +34,19 @@ $ ->
 
     url: () ->
       return "/search/all/#{@get 'query'}"
+
+    parse: (resp, xhr) ->
+      console.log 'parse'
+      me = {}
+      _(resp).map (value, type) ->
+         clazz = Track
+         switch type
+           when 'bands'  then clazz = Band
+           when 'artist' then clazz = Artist
+           when 'tracks' then clazz = Track
+         me[type] = _(value).map (v) ->
+            new clazz v
+      me
 
   AlbumCollection = Backbone.Collection.extend
     url: '/album'
