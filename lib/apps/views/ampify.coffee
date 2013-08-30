@@ -94,10 +94,10 @@ $ ->
           id: 3619628392 # Tycho - Dive
       ]
 
-      @collection.add [
-        new Album
-          id: 1546934218 # Chrome sparks - sparks ep
-      ]
+      # @collection.add [
+      #   new Album
+      #     id: 1546934218 # Chrome sparks - sparks ep
+      # ]
 
 
     searchResult: (search) ->
