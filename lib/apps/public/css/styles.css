@@ -10,10 +10,10 @@
 
 #player {
   -webkit-user-select: none;
+  font-size: 2em;
 }
 
 #currentlyPlaying {
-  font-size: 2em;
   margin: 10px;
   color: white;
 }
