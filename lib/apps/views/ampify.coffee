@@ -36,14 +36,13 @@ $ ->
       return "/search/all/#{@get 'query'}"
 
     parse: (resp, xhr) ->
-      console.log 'parse'
-      me = {}
-      _(resp).map (value, type) ->
+      me = { bands: [], artists: [], tracks: [] }
+      _(resp).each (value, type) ->
          clazz = Track
          switch type
-           when 'bands'  then clazz = Band
-           when 'artist' then clazz = Artist
-           when 'tracks' then clazz = Track
+           when 'bands'   then clazz = Band
+           when 'artists' then clazz = Artist
+           when 'tracks'  then clazz = Track
          me[type] = _(value).map (v) ->
             new clazz v
       me
@@ -76,7 +75,7 @@ $ ->
   # ###
   # Views
   # ###
-  AppView = Backbone.View.extend 
+  AppView = Backbone.View.extend
     el: $ '#albums'
 
     initialize: () ->
@@ -84,8 +83,9 @@ $ ->
       @listenTo @collection, 'add', @addAlbum
       @listenTo @collection, 'change', @albumUpdate
 
-      @searchView = new SearchView
-
+      @searcher = new Search
+      @listenTo @searcher, 'change', @searchResult
+      @searchView = new SearchView { model: @searcher }
 
       @render()
 
@@ -99,6 +99,13 @@ $ ->
           id: 1546934218 # Chrome sparks - sparks ep
       ]
 
+
+    searchResult: (search) ->
+      for album in search.get 'albums'
+        console.log JSON.stringify album.toJSON()
+        @collection.add [
+          album
+        ]
 
     render: ->
       return this
@@ -128,6 +135,7 @@ $ ->
     el: $ '#search'
 
     initialize: ->
+      #@listenTo @model, 'change', @renderResults
       @$el.typeahead {
         name: 'ampify'
         local: [
@@ -140,15 +148,12 @@ $ ->
     events:
       change: 'search'
 
-    renderResults: (search) ->
-      for type in ['albums', 'bands', 'tracks']
-        console.log type
-        console.log search.get type
+      # renderResults: (search) ->
+      #   console.log search
 
     search: ->
-      s = new Search({ query: @$el.val() })
-      @listenTo s, 'change', @renderResults
-      s.fetch()
+      @model.set 'query', @$el.val()
+      @model.fetch()
 
   # ----------------------------------------------------------------
 
@@ -190,7 +195,7 @@ $ ->
 
     changeTrack: (track) ->
       prev = _.last(@previous)
-      
+
       if prev?
         prev.set('playing', false)
 
