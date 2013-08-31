@@ -7,13 +7,22 @@ require 'coffee-script'
 require 'data_mapper'
 require 'dm-sqlite-adapter'
 require 'json'
+require 'logger'
 
-require_relative './models/song'
 
 $sensitive = YAML::load File.read './sensitive.yml'
 Bandcamp.config.api_key = $sensitive[:api_key]
 
-use Rack::Logger
+configure do
+  use Rack::CommonLogger, $stdout
+end
+
+configure :development do
+    set :logging, Logger::DEBUG
+    DataMapper::Logger.new($stdout, :debug)
+end
+
+require_relative './models/song'
 
 helpers do
   def logger
@@ -48,10 +57,13 @@ helpers do
   end
 
   def find_album query
+    logger.debug "find album"
     ours = Album.first query
     unless ours
       if query[:album_id]
         album = Bandcamp.get.album query[:album_id]
+        # Item doesn't exist
+        return nil if album.respond_to? :error and album.error
         band = find_band :band_id => album.band_id
         ours = Album.first :album_id => album.album_id
       end
@@ -60,6 +72,7 @@ helpers do
   end
 
   def find_band query
+    logger.debug "find band"
     ours = Band.first query
     unless ours
       if query[:band_id]
