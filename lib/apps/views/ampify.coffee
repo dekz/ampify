@@ -231,14 +231,13 @@ $ ->
 
       @player = @$('#audioPlayer')[0]
       @volume = @$('.slider')
-      @volume.slider().on 'slide', (ev) ->
+      @volume.slider({'tooltip': 'hide'}).on 'slide', (ev) ->
         console.log ev
-      console.log @volume
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
       @stopBtn = @$ '#stopBtn'
       @nextBtn = @$ '#nextBtn'
-      @currentlyPlaying = @$ '#currentlyPlaying'
+      @currentlyPlaying = $ '#currentlyPlaying'
       @previous = []
 
       window.player = @player

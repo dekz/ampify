@@ -1,7 +1,7 @@
 /*Key Pieces*/
 
 #ampify {
-  padding-top: 60px;
+  /*padding-top: 80px;*/
 }
 
 #audioPlayer {
@@ -9,19 +9,17 @@
 }
 
 #player {
+  width: 100%;
+  text-align: center;
   -webkit-user-select: none;
-  font-size: 2em;
 }
 
 #currentlyPlaying {
-  margin: 10px;
-  color: white;
+  color: black;
 }
 
 #search {
-  margin: 20px 0;
-  height: 2em;
-  font-size: 2em
+  width: 200%;
 }
 
 /*Classes*/
@@ -29,9 +27,20 @@
 .player-controls {
   width: 100%;
   text-align: center;
-  color: white
+  color: black;
+}
+
+.slider {
+  width: 60%;
+  text-align: center;
 }
 
 .player-icon {
   padding: 10px;
+}
+
+#volume .slider-handle {
+  width: 10px;
+  height: 20px;
+  background: black;
 }
