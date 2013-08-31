@@ -1,4 +1,4 @@
-%nav.navbar.navbar-default{role: 'navigation'}
+%nav.navbar-fixed-top.navbar-inverse.navbar-default{role: 'navigation'}
   %div.navbar-header
     %a.navbar-brand Ampify
 
@@ -32,8 +32,10 @@
 
 %div.container{id: 'ampify'}
 
-  %h3 Albums in your playlist:
-  %div#albums
+  %div.panel
+    %h4.panel-heading Albums
+    %ul.list-group{id: 'albums'}
 
-  %h3 Playlist:
-  %div#playlist
+  %div.panel
+    %h4.panel-heading Playlist
+    %ul.list-group{id: 'playlist'}

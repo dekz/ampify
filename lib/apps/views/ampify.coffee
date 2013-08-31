@@ -24,7 +24,7 @@ $ ->
   Album = Backbone.Model.extend
     select: ->
       @trigger 'select', this
-    
+
     defaults:
       tracks: []
 
@@ -40,14 +40,14 @@ $ ->
 
     parse: (resp, xhr) ->
       results = {bands: [], albums: [], tracks: []}
-      
+
       _.each resp.bands, (bandDetails) ->
         results.bands.push new Band bandDetails
       _.each resp.albums, (albumDetails) ->
         results.albums.push new Album albumDetails
       _.each resp.tracks, (trackDetails) ->
         results.tracks.push new Track trackDetails
- 
+
       return results
 
     selectAlbum: (album) ->
@@ -127,14 +127,6 @@ $ ->
         tm = new Track track
         playlist.add tm
 
-
-  AlbumView = Backbone.View.extend
-    initialize: ->
-      @listenTo @model, 'change', @render
-
-    render: ->
-      @$el.html @model.get 'title'
-      return this
 
 
   SearchView = Backbone.View.extend
@@ -294,6 +286,19 @@ $ ->
 
 
 
+  AlbumView = Backbone.View.extend
+    initialize: ->
+      @listenTo @model, 'change', @render
+
+    template: """
+      <span class="list-group-item">{{title}} </span>
+    """
+
+    render: ->
+      @$el.html Mustache.render(@template, @model.attributes)
+      return this
+
+
   PlaylistView = Backbone.View.extend
     el: '#playlist'
 
@@ -318,10 +323,12 @@ $ ->
       @listenTo @model, 'change', @render
 
     template: """
+      <a href="#" class="list-group-item" >
       {{#playing }}
-        <i class="icon-music"/>
+      <span class="badge">  <i class="icon-music"/> </span>
       {{/playing}}
-      <span> {{title}} </span>
+      <span>{{title}} </span>
+      </a>
     """
 
     events: ->

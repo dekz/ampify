@@ -1,7 +1,7 @@
 /*Key Pieces*/
 
 #ampify {
-  /*padding-top: 80px;*/
+  padding-top: 80px;
 }
 
 #audioPlayer {
@@ -15,11 +15,12 @@
 }
 
 #currentlyPlaying {
-  color: black;
+  color: rgb(255,255,255);
 }
 
 #search {
 }
+
 #search #searchResults {
   left: 14px;
   width: 85%;
@@ -30,7 +31,7 @@
 .player-controls {
   width: 100%;
   text-align: center;
-  color: black;
+  color: rgb(255,255,255);
 }
 
 .slider {
@@ -40,10 +41,24 @@
 
 .player-icon {
   padding: 10px;
+  color: #cdbfe3;
 }
 
+#volume .slider-selection {
+  background: #ffffff;
+}
+#volume .slider-track {
+  background: #bbbbbb;
+}
 #volume .slider-handle {
   width: 10px;
   height: 20px;
-  background: black;
+  background: #cdbfe3;
+}
+
+.navbar-inverse {
+  background-color: rgb(86, 61, 124);
+}
+.navbar-inverse .navbar-brand {
+  color: rgb(255,255,255);
 }
