@@ -1,7 +1,7 @@
 class Band
   include DataMapper::Resource
 
-  property :id,         Serial
+  property :id,         String, :key => true
   property :band_id,    String
   property :name,       String
   property :url,        String
@@ -41,7 +41,6 @@ class Playlist
   has n, :tracks, :through => Resource
 end
 
-DataMapper::Logger.new($stdout, :debug)
 DataMapper.finalize
 HOME = File.expand_path(File.join(File.dirname(__FILE__), '../../../'))
 DataMapper.setup(:default, "sqlite3://#{File.join(HOME, "/bandcamp.db")}")

@@ -30,15 +30,17 @@ helpers do
   end
 
   def populate_band band_id
+    logger.debug "populating band #{band_id}"
     result = Bandcamp.get.band band_id
     disco = Bandcamp.get.discography band_id
-    ours = Band.create(:name => result.name , :band_id => result.band_id , :url => result.url)
+    ours = Band.create(:id => result.band_id, :name => result.name , :band_id => result.band_id , :url => result.url)
 
     albums = []
+    binding.pry
     disco.albums.each do |da|
       next unless da.respond_to? :album_id
       album = Bandcamp.get.album da.album_id
-      a = Album.create(:band => ours, :title => album.title, :artist => da.artist,
+      a = Album.create(:id => da.album_id, :band => ours, :title => album.title, :artist => da.artist,
                        :album_id => da.album_id, :release_date => album.release_date)
       a.tracks = album.tracks.map do |t|
         track = Track.create(:title => t.title, :album => a, :duration => t.duration)
@@ -64,6 +66,7 @@ helpers do
         album = Bandcamp.get.album query[:album_id]
         # Item doesn't exist
         return nil if album.respond_to? :error and album.error
+        binding.pry
         band = find_band :band_id => album.band_id
         ours = Album.first :album_id => album.album_id
       end
