@@ -163,6 +163,9 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @player = @$('#audioPlayer')[0]
+      @volume = @$('.slider')
+      @volume.slider()
+      console.log @volume
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
       @stopBtn = @$ '#stopBtn'
