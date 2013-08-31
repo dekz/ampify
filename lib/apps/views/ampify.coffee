@@ -164,7 +164,8 @@ $ ->
 
       @player = @$('#audioPlayer')[0]
       @volume = @$('.slider')
-      @volume.slider()
+      @volume.slider().on 'slide', (ev) ->
+        console.log ev
       console.log @volume
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
