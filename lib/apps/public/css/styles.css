@@ -1,5 +1,3 @@
-/*Key Pieces*/
-
 #ampify {
   padding-top: 80px;
 }
@@ -18,15 +16,10 @@
   color: rgb(255,255,255);
 }
 
-#search {
-}
-
 #search #searchResults {
   left: 14px;
   width: 85%;
 }
-
-/*Classes*/
 
 .player-controls {
   width: 100%;
@@ -47,13 +40,24 @@
 #volume .slider-selection {
   background: #ffffff;
 }
+
 #volume .slider-track {
   background: #bbbbbb;
+  height: 5px;
 }
+
 #volume .slider-handle {
   width: 10px;
-  height: 20px;
+  height: 15px;
   background: #cdbfe3;
+}
+
+#playlist .panel-heading {
+  padding: 5px 15px;
+}
+
+#playlist .list-group-item {
+  padding: 5px 15px;
 }
 
 .navbar-inverse {
