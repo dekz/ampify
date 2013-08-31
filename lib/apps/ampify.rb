@@ -36,7 +36,6 @@ helpers do
     ours = Band.create(:id => result.band_id, :name => result.name , :band_id => result.band_id , :url => result.url)
 
     albums = []
-    binding.pry
     disco.albums.each do |da|
       next unless da.respond_to? :album_id
       album = Bandcamp.get.album da.album_id
@@ -66,7 +65,6 @@ helpers do
         album = Bandcamp.get.album query[:album_id]
         # Item doesn't exist
         return nil if album.respond_to? :error and album.error
-        binding.pry
         band = find_band :band_id => album.band_id
         ours = Album.first :album_id => album.album_id
       end
