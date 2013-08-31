@@ -22,6 +22,9 @@ $ ->
       url: ''
 
   Album = Backbone.Model.extend
+    select: ->
+      @trigger 'select', this
+    
     defaults:
       tracks: []
 
@@ -36,16 +39,20 @@ $ ->
       return "/search/all/#{@get 'query'}"
 
     parse: (resp, xhr) ->
-      me = { bands: [], artists: [], tracks: [] }
-      _(resp).each (value, type) ->
-         clazz = Track
-         switch type
-           when 'bands'   then clazz = Band
-           when 'artists' then clazz = Artist
-           when 'tracks'  then clazz = Track
-         me[type] = _(value).map (v) ->
-           new clazz v
-      me
+      results = {bands: [], albums: [], tracks: []}
+      
+      _.each resp.bands, (bandDetails) ->
+        results.bands.push new Band bandDetails
+      _.each resp.albums, (albumDetails) ->
+        results.albums.push new Album albumDetails
+      _.each resp.tracks, (trackDetails) ->
+        results.tracks.push new Track trackDetails
+ 
+      return results
+
+    selectAlbum: (album) ->
+      @trigger 'selectAlbum', album
+
 
   AlbumCollection = Backbone.Collection.extend
     url: '/album'
@@ -84,7 +91,7 @@ $ ->
       @listenTo @collection, 'change', @albumUpdate
 
       @searcher = new Search
-      @listenTo @searcher, 'select', @addToPlaylist
+      @listenTo @searcher, 'selectAlbum', @addToPlaylist
       @searchView = new SearchView { model: @searcher }
 
       @render()
@@ -109,6 +116,7 @@ $ ->
       return this
 
     addAlbum: (album) ->
+      console.log 'album added'
       album.fetch()
       albumView = new AlbumView {model: album}
       @$el.append albumView.render().el
@@ -133,25 +141,84 @@ $ ->
     el: $ '#search'
 
     initialize: ->
-      #@listenTo @model, 'change', @renderResults
-      @$el.typeahead {
-        name: 'ampify'
-        local: [
-          'yeah'
-          'what'
-          'okay'
-        ]
-      }
+      @input = @$ '#searchInput'
+      @results = @$ '#searchResults'
+      @resultsBands = @$ '#searchResults .searchResultsBands'
+      @resultsAlbums = @$ '#searchResults .searchResultsAlbums'
+      @resultsTracks = @$ '#searchResults .searchResultsTracks'
+
+      @listenTo @model, 'change:bands', @renderResults
+      @listenTo @model, 'change:albums', @renderResults
+      @listenTo @model, 'change:tracks', @renderResults
 
     events:
-      change: 'search'
+      'change #searchInput': 'search'
 
-      # renderResults: (search) ->
-      #   console.log search
+    renderResults: (search) ->
+      @resultsBands.empty()
+      @resultsAlbums.empty()
+      @resultsTracks.empty()
+      console.log 'search results', search
+
+      for band in search.get 'bands'
+        bv = new BandResultView {model: band}
+        @resultsBands.append bv.render().el
+
+      for album in search.get 'albums'
+        av = new AlbumResultView {model: album}
+        @listenTo album, 'select', @selectAlbum
+        @resultsAlbums.append av.render().el
+
+      for track in search.get 'tracks'
+        tv = new TrackResultView {model: track}
+        @resultsTracks.append tv.render().el
 
     search: ->
-      @model.set 'query', @$el.val()
+      @model.set 'query', @input.val()
       @model.fetch()
+
+    selectAlbum: (album) ->
+      @model.selectAlbum album
+
+  BandResultView = Backbone.View.extend
+    template: "<div>{{name}}<div>"
+
+    events: ->
+      click: 'select'
+
+    render: ->
+      @$el.html Mustache.render(@template, @model.attributes)
+      return this
+
+    select: ->
+      console.log 'touched band', @model
+
+  AlbumResultView = Backbone.View.extend
+    template: "<div>{{title}}<div>"
+
+    events: ->
+      click: 'select'
+
+    render: ->
+      @$el.html Mustache.render(@template, @model.attributes)
+      return this
+
+    select: ->
+      @model.select()
+
+  TrackResultView = Backbone.View.extend
+    template: "<div>{{title}}<div>"
+
+    events: ->
+      click: 'select'
+
+    render: ->
+      @$el.html Mustache.render(@template, @model.attributes)
+      return this
+
+    select: ->
+      console.log 'touched track', @model
+
 
   # ----------------------------------------------------------------
 

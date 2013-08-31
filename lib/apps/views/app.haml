@@ -16,12 +16,18 @@
         %i.player-icon.icon-stop{id: 'stopBtn'}
         %i.player-icon.icon-forward{id: 'nextBtn'}
 
-      %span.volume-controls
-        %div.well
-          %div.slider
+      / %span.volume-controls
+      /   %div.well
+      /     %div.slider
 
 %div.container{id: 'ampify'}
-  %input.form-control{id: 'search', type: 'text', placeholder: 'Search'}
+  %div.row{id: 'search'}
+    %div.col-md-6
+      %input.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
+    %div.col-md-6{id: 'searchResults'} 
+      %div.searchResultsBands
+      %div.searchResultsAlbums
+      %div.searchResultsTracks
 
   %h3 Albums in your playlist:
   %div#albums
