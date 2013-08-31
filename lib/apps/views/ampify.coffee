@@ -84,7 +84,7 @@ $ ->
       @listenTo @collection, 'change', @albumUpdate
 
       @searcher = new Search
-      @listenTo @searcher, 'change', @searchResult
+      @listenTo @searcher, 'select', @addToPlaylist
       @searchView = new SearchView { model: @searcher }
 
       @render()
@@ -100,12 +100,10 @@ $ ->
       # ]
 
 
-    searchResult: (search) ->
-      for album in search.get 'albums'
-        console.log JSON.stringify album.toJSON()
-        @collection.add [
-          album
-        ]
+    addToPlaylist: (album) ->
+      @collection.add [
+        album
+      ]
 
     render: ->
       return this
