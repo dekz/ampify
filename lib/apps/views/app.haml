@@ -1,14 +1,18 @@
 %nav.navbar.navbar-default{role: 'navigation'}
   %div.navbar-header
     %a.navbar-brand Ampify
+
   %div.collapse.navbar-collapse.navbar-ex1-collapse
-    %div.navbar-form.navbar-nav
-      %div.form-group{id: 'search'}
+    %ul.nav.navbar-nav.form-group.row{id: 'search'}
+      %li.dropdown.navbar-form
         %input.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
-      %div.col-md-7{id: 'searchResults'}
-        %div.searchResultsBands
-        %div.searchResultsAlbums
-        %div.searchResultsTracks
+        %ul.dropdown-menu{id: 'searchResults'}
+          %li
+            %a
+              %div.searchResultsBands
+              %div.searchResultsAlbums
+              %div.searchResultsTracks
+
     %div.nav.navbar-nav.navbar-right
       %div{id: 'player'}
         %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
@@ -20,6 +24,7 @@
             %i.player-icon.icon-forward{id: 'nextBtn'}
           %div.volume{id: 'volume' }
             %div.slider
+
     %div.nav.navbar-nav.navbar-right
       %li.disabled
         %a
@@ -32,39 +37,3 @@
 
   %h3 Playlist:
   %div#playlist
-
-//%div.navbar.navbar-default.navbar-fixed-top
-//  %div.navbar-header
-//    %a.navbar-brand Ampify
-//    %ul.nav.navbar-nav
-//      %li.active
-//      //  %a One
-//    %div.row{id: 'search'}
-//      %div.col-md-7
-//        %input.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
-//      %div.col-md-7{id: 'searchResults'}
-//        %div.searchResultsBands
-//        %div.searchResultsAlbums
-//        %div.searchResultsTracks
-//  %div.navbar-right
-//    %div{id: 'player'}
-//      %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
-//
-//      %span{id: 'currentlyPlaying'}
-//
-//      %span.player-controls
-//        %i.player-icon.icon-backward{id: 'prevBtn'}
-//        %i.player-icon.icon-play{id: 'playPauseBtn'}
-//        %i.player-icon.icon-stop{id: 'stopBtn'}
-//        %i.player-icon.icon-forward{id: 'nextBtn'}
-//        %div.volume
-//          %div.slider{id: 'volume-slider' }
-//
-//
-//%div.container{id: 'ampify'}
-//
-//  %h3 Albums in your playlist:
-//  %div#albums
-//
-//  %h3 Playlist:
-//  %div#playlist

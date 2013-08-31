@@ -172,6 +172,7 @@ $ ->
       for track in search.get 'tracks'
         tv = new TrackResultView {model: track}
         @resultsTracks.append tv.render().el
+      @results.toggle()
 
     search: ->
       @model.set 'query', @input.val()
@@ -179,6 +180,7 @@ $ ->
 
     selectAlbum: (album) ->
       @model.selectAlbum album
+      @results.toggle()
 
   BandResultView = Backbone.View.extend
     template: "<div>{{name}}<div>"

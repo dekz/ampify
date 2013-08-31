@@ -19,7 +19,10 @@
 }
 
 #search {
-  width: 200%;
+}
+#search #searchResults {
+  left: 14px;
+  width: 85%;
 }
 
 /*Classes*/
