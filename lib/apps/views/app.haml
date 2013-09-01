@@ -1,40 +1,40 @@
-%nav.navbar-fixed-top.navbar-inverse.navbar-default{role: 'navigation'}
-  %div.navbar-header
-    %a.navbar-brand Ampify
+%div.container{id: 'ampify'}
 
-  %div.collapse.navbar-collapse.navbar-ex1-collapse
-    %ul.nav.navbar-nav.form-group.row{id: 'search'}
-      %li.dropdown.navbar-form
-        %input.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
-        %ul.dropdown-menu{id: 'searchResults'}
-          %li
-            %a
-              %div.searchResultsBands
-              %div.searchResultsAlbums
-              %div.searchResultsTracks
-
-    %div.nav.navbar-nav.navbar-right
-      %div{id: 'player'}
+  %div.row
+    %div.col-md-6{id: 'search'}
+      %input.form-group.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
+      %ul.dropdown-menu{id: 'searchResults'}
+        %li
+          %a
+            %div.searchResultsBands
+            %div.searchResultsAlbums
+            %div.searchResultsTracks
+    %div.col-md-2.col-md-offset-2
+      %p.text-right{id: 'currentlyPlaying'}
+    %div.col-md-2{id: 'player'}
+      %div.row
         %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
-        %ul
+        %div.col-md-9
           %span.player-controls
             %i.player-icon.icon-backward{id: 'prevBtn'}
             %i.player-icon.icon-play{id: 'playPauseBtn'}
             %i.player-icon.icon-forward{id: 'nextBtn'}
+      %div.row
+        %div.col-md-9
           %div.volume{id: 'volume' }
             %div.slider
 
-    %div.nav.navbar-nav.navbar-right
-      %li.disabled
-        %a
-          %span{id: 'currentlyPlaying'}
+  %div.row
+    %div.col-md-2
+      %div.panel
+        %h4.panel-heading Albums
+        %ul.list-group{id: 'albums'}
 
-%div.container{id: 'ampify'}
-
-  %div.panel
-    %h4.panel-heading Albums
-    %ul.list-group{id: 'albums'}
-
-  %div.panel
-    %h4.panel-heading Playlist
-    %ul.list-group{id: 'playlist'}
+    %div.col-md-8
+      %div.panel
+        %h4.panel-heading Playlist
+        %ul.list-group{id: 'playlist'}
+    %div.col-md-1
+      %div.panel
+        %h4.panel-heading Band
+        %ul.list-group{id: 'bandInfo'}

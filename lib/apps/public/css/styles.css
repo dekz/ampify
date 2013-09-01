@@ -1,5 +1,5 @@
 #ampify {
-  padding-top: 80px;
+  padding-top: 20px;
 }
 
 #audioPlayer {
@@ -7,13 +7,10 @@
 }
 
 #player {
-  width: 100%;
-  text-align: center;
-  -webkit-user-select: none;
 }
 
 #currentlyPlaying {
-  color: rgb(255,255,255);
+  color: #cdbfe3;
 }
 
 #search #searchResults {
@@ -22,13 +19,12 @@
 }
 
 .player-controls {
-  width: 100%;
   text-align: center;
   color: rgb(255,255,255);
 }
 
 .slider {
-  width: 60%;
+  width: 50%;
   text-align: center;
 }
 
@@ -66,3 +62,4 @@
 .navbar-inverse .navbar-brand {
   color: rgb(255,255,255);
 }
+  */
