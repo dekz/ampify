@@ -19,13 +19,16 @@
 }
 
 .player-controls {
-  text-align: center;
   color: rgb(255,255,255);
 }
 
 .slider {
-  width: 50%;
   text-align: center;
+  width: 100%;
+}
+
+.slider.slider-horizontal {
+  width: 100%;
 }
 
 .player-icon {
@@ -33,7 +36,12 @@
   color: #cdbfe3;
 }
 
-#volume .slider-selection {
+#muteBtn {
+  padding: 0px 0px;
+  text-align: left;
+}
+
+.slider-selection {
   background: #ffffff;
 }
 
@@ -42,7 +50,14 @@
   height: 5px;
 }
 
-#volume .slider-handle {
+#progress {
+}
+#progress .slider-track {
+  background: #bbbbbb;
+  height: 5px;
+}
+
+.slider-handle {
   width: 10px;
   height: 15px;
   background: #cdbfe3;

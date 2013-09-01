@@ -57,7 +57,8 @@ helpers do
 
       # Grab them tracks, not sure how long the streaming urls are valid for
       album.tracks.each do |t|
-        track = Track.create(:title => t.title, :album => a, :duration => t.duration)
+        track = Track.create(:title => t.title, :album => a, :duration => t.duration, :id => t.track_id,
+                             :band_name => band.name)
         track.streaming_url = t.streaming_url if t.respond_to? :streaming_url
         track.save
         a.tracks.push track

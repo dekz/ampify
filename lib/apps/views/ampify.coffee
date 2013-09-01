@@ -11,7 +11,7 @@ $ ->
   # ###
   Track = Backbone.Model.extend
     defaults:
-      artist: 'artistName'
+      band_name: ''
 
   Player = Backbone.Model
 
@@ -224,13 +224,21 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @player = @$('#audioPlayer')[0]
-      @volume = @$('.slider')
+      @volume = @$('#volume .slider')
       @volume.slider({
         'tooltip': 'hide',
         'max': 100,
         'value': 75,
       }).on 'slide', (ev) ->
         $('#audioPlayer')[0].volume = (ev.value / 100)
+
+      @progress = $('#progress .slider')
+      @progress.slider({
+        'tooltip': 'hide',
+        'max': 100,
+        'value': 0,
+      }).on 'slide', (ev) ->
+        console.log ev
 
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
@@ -270,7 +278,7 @@ $ ->
       @currentTrack = track
 
       @player.src = track.get 'streaming_url'
-      @currentlyPlaying.text track.get 'title'
+      @currentlyPlaying.text "#{track.get 'title'} - #{track.get 'band_name'}"
       @player.play()
       @togglePlay()
 
@@ -317,6 +325,7 @@ $ ->
 
       @collection.each (track) ->
         trackView = new TrackView {model: track}
+        console.log trackView.render()
         container.appendChild trackView.render().el
 
       @$el.append container
@@ -328,12 +337,13 @@ $ ->
       @listenTo @model, 'change', @render
 
     template: """
-      <a href="#" class="list-group-item" >
+        <tr >
+          <td>{{title}}</td>
+          <td>{{band_name}}</td>
       {{#playing }}
       <span class="badge">  <i class="icon-music"/> </span>
       {{/playing}}
-      <span>{{title}} </span>
-      </a>
+        </tr>
     """
 
     events: ->

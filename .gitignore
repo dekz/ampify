@@ -1,3 +1,4 @@
+*.orig
 *.db
 *.gem
 *.rbc
