@@ -99,4 +99,12 @@
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(205, 191, 227, 1);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(205, 191, 227, 1);
 }
-  */
+
+.badge {
+  background: #cdbfe3;
+}
+
+.table-hover > tbody > tr:hover > td {
+  background-color: rgba(205, 191, 227, 0.45);
+  border-color: #cdbfe3;
+}
