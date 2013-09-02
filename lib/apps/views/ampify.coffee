@@ -378,12 +378,10 @@ $ ->
 
     template: """
       <td>
-        <a href='#' >
         {{#playing }}
         <span class="badge">  <i class="icon-music"/> </span>
         {{/playing}}
         <span>{{title}} </span>
-        </a>
       </td>
       <td>
         <span>{{band_name}} </span>
