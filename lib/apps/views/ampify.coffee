@@ -379,19 +379,19 @@ $ ->
       @listenTo @model, 'change', @render
 
     template: """
-      <td>
+      <td class="badge-td">
         {{#playing }}
         <span class="badge">  <i class="icon-music"/> </span>
         {{/playing}}
       </td>
       <td>
-        <span>{{title}} </span>
+        <span>{{title}}</span>
       </td>
       <td>
-        <span>{{band_name}} </span>
+        <span>{{band_name}}</span>
       </td>
       <td>
-        <span>{{duration}} </span>
+        <span>{{duration}}</span>
       </td>
     """
 
