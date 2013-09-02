@@ -3,7 +3,9 @@ require 'json'
 
 describe 'API' do
   before :all do
-    @conn = Faraday.new(:url => 'http://localhost:5000') do |faraday|
+    host = ENV['AMPIFY_HOST'] || 'http://localhost:5000'
+    puts host
+    @conn = Faraday.new(:url => host) do |faraday|
       faraday.response :logger
       faraday.adapter  Faraday.default_adapter
     end
@@ -18,8 +20,22 @@ describe 'API' do
 
   it 'should get a band' do
     resp = @conn.get '/band/3025875313'
-    album = JSON.parse resp.body
-    album['name'].should == "Chrome Sparks"
+    band = JSON.parse resp.body
+    band['name'].should == "Chrome Sparks"
+  end
+
+  it 'can populate' do
+    bands = [
+      #'3037729624',
+      '687693559',
+      '432335280',
+      '2595713091'
+    ]
+    bands.each do |b|
+      resp = @conn.get "/band/#{b}"
+      band = JSON.parse resp.body
+      puts band
+    end
   end
 
 end
