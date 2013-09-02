@@ -332,17 +332,16 @@ $ ->
 
 
   TrackView = Backbone.View.extend
+    el: '<a href="#" class="list-group-item" >'
+
     initialize: ->
       @listenTo @model, 'change', @render
 
     template: """
-        <tr >
-          <td>{{title}}</td>
-          <td>{{band_name}}</td>
       {{#playing }}
       <span class="badge">  <i class="icon-music"/> </span>
       {{/playing}}
-        </tr>
+      <span>{{title}} </span>
     """
 
     events: ->
