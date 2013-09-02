@@ -1,4 +1,4 @@
-%div.container{id: 'ampify'}
+%div.container{id: 'header'}
 
   %div.row
     %div.col-md-5{id: 'search'}
@@ -9,15 +9,15 @@
             %div.searchResultsBands
             %div.searchResultsAlbums
             %div.searchResultsTracks
-    %div.col-md-2.col-md-offset-2
+    %div.col-md-2.col-md-offset-3
       %div.row
-        %p.text-right{id: 'currentlyPlaying'} &nbsp;
+        %i.text-center.currently-playing{id: 'currentlyPlaying'} &nbsp;
       %div.row
         %div{id: 'progress'}
           %div.col-md-8
             %div.slider
           %div.col-md-1
-            %p.text-right 4:03
+            %span.text-right.currently-playing 4:03
     %div.col-md-2{id: 'player'}
       %div.row
         %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
@@ -32,6 +32,8 @@
             %div.slider
         %div.col-md-1
           %i.player-icon.icon-volume-up{id: 'muteBtn'}
+
+%div.container{id: 'ampify'}
 
   %div.row
     %div.col-md-2

@@ -325,7 +325,6 @@ $ ->
 
       @collection.each (track) ->
         trackView = new TrackView {model: track}
-        console.log trackView.render()
         container.appendChild trackView.render().el
 
       @$el.append container

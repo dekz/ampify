@@ -1,5 +1,7 @@
-#ampify {
+#header {
   padding-top: 20px;
+}
+#ampify {
 }
 
 #audioPlayer {
@@ -11,6 +13,14 @@
 
 #currentlyPlaying {
   color: #cdbfe3;
+  text-align: right;
+  font-size: 12px;
+}
+
+.currently-playing {
+  color: #cdbfe3;
+  text-align: right;
+  font-size: 12px;
 }
 
 #search #searchResults {
@@ -42,25 +52,27 @@
 }
 
 .slider-selection {
-  background: #ffffff;
+  background: #cdbfe3;
 }
 
 #volume .slider-track {
-  background: #bbbbbb;
-  height: 5px;
+  background: #dddddd;
+  height: 7px;
 }
 
 #progress {
 }
+
 #progress .slider-track {
-  background: #bbbbbb;
-  height: 5px;
+  background: #dddddd;
+  height: 7px;
 }
 
 .slider-handle {
   width: 10px;
   height: 15px;
   background: #cdbfe3;
+  display: none;
 }
 
 #playlist .panel-heading {
