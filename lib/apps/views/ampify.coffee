@@ -263,9 +263,8 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @player = @$('#audioPlayer')[0]
-      @player.addEventListener('ended', () =>
-        @nextTrack()
-      )
+      @player.addEventListener 'ended', @nextTrack
+      
       @volume = @$('#volume .slider')
       @volume.slider({
         'tooltip': 'hide',
