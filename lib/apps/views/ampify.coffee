@@ -263,6 +263,9 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @player = @$('#audioPlayer')[0]
+      @player.addEventListener('ended', () =>
+        @nextTrack()
+      )
       @volume = @$('#volume .slider')
       @volume.slider({
         'tooltip': 'hide',
@@ -381,6 +384,8 @@ $ ->
         {{#playing }}
         <span class="badge">  <i class="icon-music"/> </span>
         {{/playing}}
+      </td>
+      <td>
         <span>{{title}} </span>
       </td>
       <td>
