@@ -52,11 +52,15 @@ helpers do
     disco.albums.each do |da|
       next unless da.respond_to? :album_id
       album = bandcamp :album, da.album_id
+
       a = Album.create(:id => da.album_id, :band => band, :title => album.title, :artist => da.artist,
                        :album_id => da.album_id, :release_date => album.release_date, :tracks => [])
 
       # Grab them tracks, not sure how long the streaming urls are valid for
       album.tracks.each do |t|
+        logger.debug "#{t.title} #{band.name}"
+        puts({:title => t.title, :album => a, :duration => t.duration, :id => t.track_id,
+                             :band_name => band.name})
         track = Track.create(:title => t.title, :album => a, :duration => t.duration, :id => t.track_id,
                              :band_name => band.name)
         track.streaming_url = t.streaming_url if t.respond_to? :streaming_url

@@ -15,7 +15,24 @@ $ ->
 
   Player = Backbone.Model
 
+  Discography = Backbone.Model.extend
+    defaults:
+      band_id: ''
+      albums: []
+
+    url: ()->
+      return "/band/#{@get 'band_id'}/discography"
+
+    parse: (resp, xhr) ->
+      albums = []
+      _.each resp, (album) ->
+        albums.push new Album album
+      return { albums: albums }
+
   Band = Backbone.Model.extend
+    select: ->
+      @trigger 'select', this
+
     defaults:
       band_id: ''
       name: ''
@@ -52,6 +69,8 @@ $ ->
 
     selectAlbum: (album) ->
       @trigger 'selectAlbum', album
+    selectBand: (band) ->
+      @trigger 'selectBand', band
 
 
   AlbumCollection = Backbone.Collection.extend
@@ -92,6 +111,7 @@ $ ->
 
       @searcher = new Search
       @listenTo @searcher, 'selectAlbum', @addToPlaylist
+      @listenTo @searcher, 'selectBand', @addBandToPlaylist
       @searchView = new SearchView { model: @searcher }
 
       @render()
@@ -111,6 +131,19 @@ $ ->
       @collection.add [
         album
       ]
+
+    addBandToPlaylist: (band) ->
+      disco = new Discography { band_id: band.get 'id' }
+      co = @collection
+      disco.fetch({
+        success: () ->
+          for album in disco.get 'albums'
+            co.add [
+              album
+            ]
+      })
+
+
 
     render: ->
       return this
@@ -154,6 +187,7 @@ $ ->
 
       for band in search.get 'bands'
         bv = new BandResultView {model: band}
+        @listenTo band, 'select', @selectBand
         @resultsBands.append bv.render().el
 
       for album in search.get 'albums'
@@ -170,6 +204,10 @@ $ ->
       @model.set 'query', @input.val()
       @model.fetch()
 
+    selectBand: (band) ->
+      @model.selectBand band
+      @results.toggle()
+
     selectAlbum: (album) ->
       @model.selectAlbum album
       @results.toggle()
@@ -185,7 +223,8 @@ $ ->
       return this
 
     select: ->
-      console.log 'touched band', @model
+      @model.select()
+      #console.log 'touched band', @model
 
   AlbumResultView = Backbone.View.extend
     template: "<div>{{title}}<div>"
