@@ -12,10 +12,6 @@ require 'logger'
 $sensitive = YAML::load File.read './sensitive.yml'
 Bandcamp.config.api_key = $sensitive[:api_key]
 
-configure do
-  use Rack::CommonLogger, $stdout
-end
-
 configure :development do
     set :logging, Logger::DEBUG
     DataMapper::Logger.new($stdout, :debug)
