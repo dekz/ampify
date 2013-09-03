@@ -172,30 +172,45 @@ $ ->
       @resultsAlbums = @$ '#searchResults .searchResultsAlbums'
       @resultsTracks = @$ '#searchResults .searchResultsTracks'
 
-      @listenTo @model, 'change:bands', @renderResults
-      @listenTo @model, 'change:albums', @renderResults
-      @listenTo @model, 'change:tracks', @renderResults
+      @listenTo @model, 'change:bands', @renderBandResults
+      @listenTo @model, 'change:albums', @renderAlbumResults
+      @listenTo @model, 'change:tracks', @renderTrackResults
 
     events:
       'change #searchInput': 'search'
+      'blur #searchInput': 'hideResults'
 
-    renderResults: (search) ->
-      @$('.search-result').remove()
+    renderBandResults: (search) ->
+      @$('.band-result').remove()
 
       for band in search.get 'bands'
         bv = new BandResultView {model: band}
         @listenTo band, 'select', @selectBand
         @resultsBands.after bv.render().el
+      
+      @results.show()
+
+    renderAlbumResults: (search) ->
+      @$('.album-result').remove()
 
       for album in search.get 'albums'
         av = new AlbumResultView {model: album}
         @listenTo album, 'select', @selectAlbum
         @resultsAlbums.after av.render().el
 
+      @results.show()
+
+    renderTrackResults: (search) ->
+      @$('.track-result').remove()
+
       for track in search.get 'tracks'
         tv = new TrackResultView {model: track}
         @resultsTracks.after tv.render().el
-      @results.toggle()
+      
+      @results.show()
+
+    hideResults: ->
+      @results.hide()
 
     search: ->
       @model.set 'query', @input.val()
@@ -210,7 +225,7 @@ $ ->
       @results.toggle()
 
   BandResultView = Backbone.View.extend
-    el: '<li class="search-result" role="presentation">'
+    el: '<li class="band-result" role="presentation">'
 
     template: '<a role="menuitem">{{name}}</a>'
 
@@ -226,7 +241,7 @@ $ ->
       #console.log 'touched band', @model
 
   AlbumResultView = Backbone.View.extend
-    el: '<li class="search-result" role="presentation">'
+    el: '<li class="album-result" role="presentation">'
 
     template: '<a role="menuitem">{{title}}</a>'
 
@@ -241,7 +256,7 @@ $ ->
       @model.select()
 
   TrackResultView = Backbone.View.extend
-    el: '<li class="search-result" role="presentation">'
+    el: '<li class="track-result" role="presentation">'
 
     template: '<a role="menuitem">{{title}}</a>'
 
