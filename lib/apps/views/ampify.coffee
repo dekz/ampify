@@ -102,7 +102,7 @@ $ ->
   # Views
   # ###
   AppView = Backbone.View.extend
-    el: $ '#albums'
+    el: $ '#playlists'
 
     initialize: () ->
       @collection = new AlbumCollection
@@ -194,7 +194,7 @@ $ ->
         bv = new BandResultView {model: band}
         @listenTo band, 'select', @selectBand
         @resultsBands.after bv.render().el
-      
+
       @results.show()
 
     renderAlbumResults: (search) ->
@@ -215,7 +215,7 @@ $ ->
       for track in search.get 'tracks'
         tv = new TrackResultView {model: track}
         @resultsTracks.after tv.render().el
-      
+
       @results.show()
 
     hideResults: ->
@@ -282,6 +282,33 @@ $ ->
 
   # ----------------------------------------------------------------
 
+  CurrentlyPlayingView = Backbone.View.extend
+    el: '#currentlyPlaying'
+
+    initialize: ->
+      @listenTo @collection, 'change:playing', @changeTrack
+
+      @title = $ '#currentlyPlayingTitle'
+      @player = $('#audioPlayer')[0]
+      @player.addEventListener 'ended', => @nextTrack()
+      @player.addEventListener 'timeupdate', => @timeUpdate()
+      @progress = $('#progress .slider')
+      @progress.slider({
+        'tooltip': 'hide',
+        'max': 100,
+        'value': 0,
+      }).on 'slide', (ev) => @seek(ev.value)
+      window.slider = @progress
+
+    changeTrack: (track) ->
+      @title.text "#{track.get 'title'} - #{track.get 'band_name'}"
+
+    seek: (pct) ->
+      @player.currentTime = @player.duration * (pct / 100)
+
+    timeUpdate: ->
+      pct = (@player.currentTime / @player.duration) * 100
+      @progress.slider('setValue', pct)
 
   PlayerView = Backbone.View.extend
     el: '#player'
@@ -291,8 +318,7 @@ $ ->
 
       @player = @$('#audioPlayer')[0]
       @player.addEventListener 'ended', => @nextTrack()
-      @player.addEventListener 'timeupdate', => @timeUpdate()
-      
+
       @volume = @$('#volume .slider')
       @volume.slider({
         'tooltip': 'hide',
@@ -301,23 +327,11 @@ $ ->
       }).on 'slide', (ev) ->
         $('#audioPlayer')[0].volume = (ev.value / 100)
 
-      @progress = $('#progress .slider')
-      @progress.slider({
-        'tooltip': 'hide',
-        'max': 100,
-        'value': 0,
-      }).on 'slide', (ev) => @seek(ev.value)
-
-      window.slider = @progress
-
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
       @stopBtn = @$ '#stopBtn'
       @nextBtn = @$ '#nextBtn'
-      @currentlyPlaying = $ '#currentlyPlaying'
       @previous = []
-
-      window.player = @player
 
     events:
       'click #playPauseBtn': 'playPause'
@@ -348,7 +362,6 @@ $ ->
       @currentTrack = track
 
       @player.src = track.get 'streaming_url'
-      @currentlyPlaying.text "#{track.get 'title'} - #{track.get 'band_name'}"
       @player.play()
       @togglePlay()
 
@@ -365,13 +378,6 @@ $ ->
 
     prevTrack: ->
       @collection.prevTrack(@currentTrack).set 'playing', true
-
-    seek: (pct) ->
-      @player.currentTime = @player.duration * (pct / 100)
-
-    timeUpdate: ->
-      pct = (@player.currentTime / @player.duration) * 100
-      @progress.slider('setValue', pct)
 
 
 
@@ -450,3 +456,4 @@ $ ->
   window.playlist = playlist = new Playlist
   playerView = new PlayerView {collection: playlist}
   playlistView = new PlaylistView {collection: playlist}
+  currentlyPlayingView = new CurrentlyPlayingView {collection: playlist}

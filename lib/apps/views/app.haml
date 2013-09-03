@@ -10,9 +10,9 @@
           %li.divider{role: 'presentation'}
           %li.searchResultsTracks.dropdown-header{role: 'presentation'} Tracks
 
-    %div.col-md-2.col-md-offset-3
+    %div.col-md-2.col-md-offset-3{id: 'currentlyPlaying'}
       %div.row
-        %i.text-center.currently-playing{id: 'currentlyPlaying'} &nbsp;
+        %i.text-center.currently-playing{id: 'currentlyPlayingTitle'} &nbsp;
       %div.row
         %div{id: 'progress'}
           %div.col-md-8
@@ -41,14 +41,16 @@
   %div.row
     %div.col-md-2
       %div.panel
-        %h4.panel-heading Albums
-        %ul.list-group{id: 'albums'}
+        %h4.panel-heading Playlists
+        %ul.list-group{id: 'playlists'}
 
     %div.col-md-8
       %div.panel
-        %h4.panel-heading Playlist
+        %h4.panel-heading 
         %table.table.table-hover.table-condensed{id: 'playlist'}
     %div.col-md-1
       %div.panel
         %h4.panel-heading Band
         %ul.list-group{id: 'bandInfo'}
+        %h6.panel-heading Albums
+        %h6.panel-heading Info
