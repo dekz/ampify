@@ -178,10 +178,17 @@ $ ->
 
     events:
       'change #searchInput': 'search'
-      # 'blur #searchResults': 'hideResults'
+      'focusout': 'hideResults'
+      'focusin': 'renderAllResults'
+
+    renderAllResults: ->
+      @renderBandResults(@model)
+      @renderAlbumResults(@model)
+      @renderTrackResults(@model)
 
     renderBandResults: (search) ->
       @$('.band-result').remove()
+      @results.dropdown()
 
       for band in search.get 'bands'
         bv = new BandResultView {model: band}
@@ -192,6 +199,7 @@ $ ->
 
     renderAlbumResults: (search) ->
       @$('.album-result').remove()
+      @results.dropdown()
 
       for album in search.get 'albums'
         av = new AlbumResultView {model: album}
@@ -202,6 +210,7 @@ $ ->
 
     renderTrackResults: (search) ->
       @$('.track-result').remove()
+      @results.dropdown()
 
       for track in search.get 'tracks'
         tv = new TrackResultView {model: track}
@@ -210,7 +219,6 @@ $ ->
       @results.show()
 
     hideResults: ->
-      console.log 'hiding'
       @results.hide()
 
     search: ->

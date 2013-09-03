@@ -3,12 +3,12 @@
   %div.row
     %div.col-md-5{id: 'search'}
       %input.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
-      %ul.dropdown-menu{id: 'searchResults'}
-        %li.searchResultsBands.dropdown-header{role: 'presentation'} Bands
-        %li.divider{role: 'presentation'}
-        %li.searchResultsAlbums.dropdown-header{role: 'presentation'} Albums
-        %li.divider{role: 'presentation'}
-        %li.searchResultsTracks.dropdown-header{role: 'presentation'} Tracks
+        %ul.dropdown-menu.dropdown-toggle{id: 'searchResults'}
+          %li.searchResultsBands.dropdown-header{role: 'presentation'} Bands
+          %li.divider{role: 'presentation'}
+          %li.searchResultsAlbums.dropdown-header{role: 'presentation'} Albums
+          %li.divider{role: 'presentation'}
+          %li.searchResultsTracks.dropdown-header{role: 'presentation'} Tracks
 
     %div.col-md-2.col-md-offset-3
       %div.row
