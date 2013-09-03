@@ -289,8 +289,9 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @title = $ '#currentlyPlayingTitle'
+      @time = $ '#currentlyPlayingTime'
       @player = $('#audioPlayer')[0]
-      @player.addEventListener 'ended', => @nextTrack()
+      @player.addEventListener 'ended', => @trackEnded()
       @player.addEventListener 'timeupdate', => @timeUpdate()
       @progress = $('#progress .slider')
       @progress.slider({
@@ -299,15 +300,24 @@ $ ->
         'value': 0,
       }).on 'slide', (ev) => @seek(ev.value)
       window.slider = @progress
+      @reset()
+
+    reset: ->
+      @title.text ''
+      @time.text ''
+      @progress.slider('setValue', 0)
+      $('#progress').hide()
 
     changeTrack: (track) ->
       @title.text "#{track.get 'title'} - #{track.get 'band_name'}"
+      $('#progress').show()
 
     seek: (pct) ->
       @player.currentTime = @player.duration * (pct / 100)
 
     timeUpdate: ->
       pct = (@player.currentTime / @player.duration) * 100
+      @time.text "#{@player.currentTime} / #{@player.duration}"
       @progress.slider('setValue', pct)
 
   PlayerView = Backbone.View.extend
