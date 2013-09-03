@@ -1,7 +1,5 @@
-#header {
-  padding-top: 20px;
-}
 #ampify {
+  padding-top: 20px;
 }
 
 #audioPlayer {
@@ -24,8 +22,7 @@
 }
 
 #search #searchResults {
-  left: 14px;
-  width: 85%;
+  width: 100%;
 }
 
 .player-controls {
@@ -44,6 +41,7 @@
 .player-icon {
   padding: 10px;
   color: #cdbfe3;
+  cursor: pointer;
 }
 
 #muteBtn {
@@ -89,4 +87,34 @@
 .navbar-inverse .navbar-brand {
   color: rgb(255,255,255);
 }
-  */
+
+.form-control {
+}
+
+.form-control:focus {
+  border-color: #cdbfe3;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(205, 191, 227, 1);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(205, 191, 227, 1);
+}
+
+.badge {
+  background: #cdbfe3;
+}
+
+.table-hover > tbody > tr:hover > td {
+  background-color: rgba(205, 191, 227, 0.45);
+  border-color: #cdbfe3;
+}
+
+.badge-td {
+  width: 36px;
+  min-width: 36px;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: rgba(205, 191, 227, 1);
+}

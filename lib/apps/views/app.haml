@@ -1,23 +1,25 @@
-%div.container{id: 'header'}
+%div.container{id: 'ampify'}
 
   %div.row
     %div.col-md-5{id: 'search'}
-      %input.form-group.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
-      %ul.dropdown-menu{id: 'searchResults'}
-        %li
-          %a
-            %div.searchResultsBands
-            %div.searchResultsAlbums
-            %div.searchResultsTracks
-    %div.col-md-2.col-md-offset-3
+      %input.form-control{id: 'searchInput', type: 'text', placeholder: 'Search'}
+        %ul.dropdown-menu.dropdown-toggle{id: 'searchResults'}
+          %li.searchResultsBands.dropdown-header{role: 'presentation'} Bands
+          %li.divider{role: 'presentation'}
+          %li.searchResultsAlbums.dropdown-header{role: 'presentation'} Albums
+          %li.divider{role: 'presentation'}
+          %li.searchResultsTracks.dropdown-header{role: 'presentation'} Tracks
+
+    %div.col-md-2.col-md-offset-3{id: 'currentlyPlaying'}
       %div.row
-        %i.text-center.currently-playing{id: 'currentlyPlaying'} &nbsp;
+        %i.text-center.currently-playing{id: 'currentlyPlayingTitle'} &nbsp;
       %div.row
         %div{id: 'progress'}
           %div.col-md-8
             %div.slider
           %div.col-md-1
-            %span.text-right.currently-playing 4:03
+            %span.text-right.currently-playing{id: 'currentlyPlayingTime'}
+
     %div.col-md-2{id: 'player'}
       %div.row
         %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
@@ -26,26 +28,29 @@
             %i.player-icon.icon-backward{id: 'prevBtn'}
             %i.player-icon.icon-play{id: 'playPauseBtn'}
             %i.player-icon.icon-forward{id: 'nextBtn'}
+
       %div.row
         %div.col-md-8
           %div{id: 'volume' }
             %div.slider
         %div.col-md-1
           %i.player-icon.icon-volume-up{id: 'muteBtn'}
-
-%div.container{id: 'ampify'}
+          %i.player-icon.icon-random{id: 'random'}
+          %i.player-icon.icon-repeat{id: 'repeat'}
 
   %div.row
     %div.col-md-2
       %div.panel
-        %h4.panel-heading Albums
-        %ul.list-group{id: 'albums'}
+        %h4.panel-heading Playlists
+        %ul.list-group{id: 'playlists'}
 
     %div.col-md-8
       %div.panel
-        %h4.panel-heading Playlist
-        %table.table.table-striped.table-condensed{id: 'playlist'}
+        %h4.panel-heading 
+        %table.table.table-hover.table-condensed{id: 'playlist'}
     %div.col-md-1
       %div.panel
         %h4.panel-heading Band
         %ul.list-group{id: 'bandInfo'}
+        %h6.panel-heading Albums
+        %h6.panel-heading Info

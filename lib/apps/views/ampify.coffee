@@ -102,7 +102,7 @@ $ ->
   # Views
   # ###
   AppView = Backbone.View.extend
-    el: $ '#albums'
+    el: $ '#playlists'
 
     initialize: () ->
       @collection = new AlbumCollection
@@ -172,33 +172,54 @@ $ ->
       @resultsAlbums = @$ '#searchResults .searchResultsAlbums'
       @resultsTracks = @$ '#searchResults .searchResultsTracks'
 
-      @listenTo @model, 'change:bands', @renderResults
-      @listenTo @model, 'change:albums', @renderResults
-      @listenTo @model, 'change:tracks', @renderResults
+      @listenTo @model, 'change:bands', @renderBandResults
+      @listenTo @model, 'change:albums', @renderAlbumResults
+      @listenTo @model, 'change:tracks', @renderTrackResults
 
     events:
       'change #searchInput': 'search'
+      'focusout': 'hideResults'
+      'focusin': 'renderAllResults'
 
-    renderResults: (search) ->
-      @resultsBands.empty()
-      @resultsAlbums.empty()
-      @resultsTracks.empty()
-      console.log 'search results', search
+    renderAllResults: ->
+      @renderBandResults(@model)
+      @renderAlbumResults(@model)
+      @renderTrackResults(@model)
+
+    renderBandResults: (search) ->
+      @$('.band-result').remove()
+      @results.dropdown()
 
       for band in search.get 'bands'
         bv = new BandResultView {model: band}
         @listenTo band, 'select', @selectBand
-        @resultsBands.append bv.render().el
+        @resultsBands.after bv.render().el
+
+      @results.show()
+
+    renderAlbumResults: (search) ->
+      @$('.album-result').remove()
+      @results.dropdown()
 
       for album in search.get 'albums'
         av = new AlbumResultView {model: album}
         @listenTo album, 'select', @selectAlbum
-        @resultsAlbums.append av.render().el
+        @resultsAlbums.after av.render().el
+
+      @results.show()
+
+    renderTrackResults: (search) ->
+      @$('.track-result').remove()
+      @results.dropdown()
 
       for track in search.get 'tracks'
         tv = new TrackResultView {model: track}
-        @resultsTracks.append tv.render().el
-      @results.toggle()
+        @resultsTracks.after tv.render().el
+
+      @results.show()
+
+    hideResults: ->
+      @results.hide()
 
     search: ->
       @model.set 'query', @input.val()
@@ -213,10 +234,12 @@ $ ->
       @results.toggle()
 
   BandResultView = Backbone.View.extend
-    template: "<div>{{name}}<div>"
+    el: '<li class="band-result" role="presentation">'
+
+    template: '<a role="menuitem">{{name}}</a>'
 
     events: ->
-      click: 'select'
+      mousedown: 'select'
 
     render: ->
       @$el.html Mustache.render(@template, @model.attributes)
@@ -227,10 +250,12 @@ $ ->
       #console.log 'touched band', @model
 
   AlbumResultView = Backbone.View.extend
-    template: "<div>{{title}}<div>"
+    el: '<li class="album-result" role="presentation">'
+
+    template: '<a role="menuitem">{{title}}</a>'
 
     events: ->
-      click: 'select'
+      mousedown: 'select'
 
     render: ->
       @$el.html Mustache.render(@template, @model.attributes)
@@ -240,10 +265,12 @@ $ ->
       @model.select()
 
   TrackResultView = Backbone.View.extend
-    template: "<div>{{title}}<div>"
+    el: '<li class="track-result" role="presentation">'
+
+    template: '<a role="menuitem">{{title}}</a>'
 
     events: ->
-      click: 'select'
+      mousedown: 'select'
 
     render: ->
       @$el.html Mustache.render(@template, @model.attributes)
@@ -255,6 +282,43 @@ $ ->
 
   # ----------------------------------------------------------------
 
+  CurrentlyPlayingView = Backbone.View.extend
+    el: '#currentlyPlaying'
+
+    initialize: ->
+      @listenTo @collection, 'change:playing', @changeTrack
+
+      @title = $ '#currentlyPlayingTitle'
+      @time = $ '#currentlyPlayingTime'
+      @player = $('#audioPlayer')[0]
+      @player.addEventListener 'ended', => @trackEnded()
+      @player.addEventListener 'timeupdate', => @timeUpdate()
+      @progress = $('#progress .slider')
+      @progress.slider({
+        'tooltip': 'hide',
+        'max': 100,
+        'value': 0,
+      }).on 'slide', (ev) => @seek(ev.value)
+      window.slider = @progress
+      @reset()
+
+    reset: ->
+      @title.text ''
+      @time.text ''
+      @progress.slider('setValue', 0)
+      $('#progress').hide()
+
+    changeTrack: (track) ->
+      @title.text "#{track.get 'title'} - #{track.get 'band_name'}"
+      $('#progress').show()
+
+    seek: (pct) ->
+      @player.currentTime = @player.duration * (pct / 100)
+
+    timeUpdate: ->
+      pct = (@player.currentTime / @player.duration) * 100
+      @time.text "#{@player.currentTime} / #{@player.duration}"
+      @progress.slider('setValue', pct)
 
   PlayerView = Backbone.View.extend
     el: '#player'
@@ -263,6 +327,8 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @player = @$('#audioPlayer')[0]
+      @player.addEventListener 'ended', => @nextTrack()
+
       @volume = @$('#volume .slider')
       @volume.slider({
         'tooltip': 'hide',
@@ -271,22 +337,11 @@ $ ->
       }).on 'slide', (ev) ->
         $('#audioPlayer')[0].volume = (ev.value / 100)
 
-      @progress = $('#progress .slider')
-      @progress.slider({
-        'tooltip': 'hide',
-        'max': 100,
-        'value': 0,
-      }).on 'slide', (ev) ->
-        console.log ev
-
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
       @stopBtn = @$ '#stopBtn'
       @nextBtn = @$ '#nextBtn'
-      @currentlyPlaying = $ '#currentlyPlaying'
       @previous = []
-
-      window.player = @player
 
     events:
       'click #playPauseBtn': 'playPause'
@@ -317,7 +372,6 @@ $ ->
       @currentTrack = track
 
       @player.src = track.get 'streaming_url'
-      @currentlyPlaying.text "#{track.get 'title'} - #{track.get 'band_name'}"
       @player.play()
       @togglePlay()
 
@@ -371,17 +425,26 @@ $ ->
 
 
   TrackView = Backbone.View.extend
+    tagName: 'tr'
+
     initialize: ->
       @listenTo @model, 'change', @render
 
     template: """
-        <tr >
-          <td>{{title}}</td>
-          <td>{{band_name}}</td>
-      {{#playing }}
-      <span class="badge">  <i class="icon-music"/> </span>
-      {{/playing}}
-        </tr>
+      <td class="badge-td">
+        {{#playing }}
+        <span class="badge">  <i class="icon-music"/> </span>
+        {{/playing}}
+      </td>
+      <td>
+        <span>{{title}}</span>
+      </td>
+      <td>
+        <span>{{band_name}}</span>
+      </td>
+      <td>
+        <span>{{duration}}</span>
+      </td>
     """
 
     events: ->
@@ -403,3 +466,4 @@ $ ->
   window.playlist = playlist = new Playlist
   playerView = new PlayerView {collection: playlist}
   playlistView = new PlaylistView {collection: playlist}
+  currentlyPlayingView = new CurrentlyPlayingView {collection: playlist}
