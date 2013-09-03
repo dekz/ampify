@@ -263,7 +263,8 @@ $ ->
       @listenTo @collection, 'change:playing', @changeTrack
 
       @player = @$('#audioPlayer')[0]
-      @player.addEventListener 'ended', @nextTrack
+      @player.addEventListener 'ended', => @nextTrack()
+      @player.addEventListener 'timeupdate', => @timeUpdate()
       
       @volume = @$('#volume .slider')
       @volume.slider({
@@ -278,8 +279,9 @@ $ ->
         'tooltip': 'hide',
         'max': 100,
         'value': 0,
-      }).on 'slide', (ev) ->
-        console.log ev
+      }).on 'slide', (ev) => @seek(ev.value)
+
+      window.slider = @progress
 
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
@@ -336,6 +338,13 @@ $ ->
 
     prevTrack: ->
       @collection.prevTrack(@currentTrack).set 'playing', true
+
+    seek: (pct) ->
+      @player.currentTime = @player.duration * (pct / 100)
+
+    timeUpdate: ->
+      pct = (@player.currentTime / @player.duration) * 100
+      @progress.slider('setValue', pct)
 
 
 
