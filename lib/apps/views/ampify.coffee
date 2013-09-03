@@ -239,7 +239,7 @@ $ ->
     template: '<a role="menuitem">{{name}}</a>'
 
     events: ->
-      click: 'select'
+      mousedown: 'select'
 
     render: ->
       @$el.html Mustache.render(@template, @model.attributes)
@@ -255,7 +255,7 @@ $ ->
     template: '<a role="menuitem">{{title}}</a>'
 
     events: ->
-      click: 'select'
+      mousedown: 'select'
 
     render: ->
       @$el.html Mustache.render(@template, @model.attributes)
@@ -270,7 +270,7 @@ $ ->
     template: '<a role="menuitem">{{title}}</a>'
 
     events: ->
-      click: 'select'
+      mousedown: 'select'
 
     render: ->
       @$el.html Mustache.render(@template, @model.attributes)
