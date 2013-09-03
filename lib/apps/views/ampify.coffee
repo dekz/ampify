@@ -178,7 +178,7 @@ $ ->
 
     events:
       'change #searchInput': 'search'
-      'blur #searchInput': 'hideResults'
+      # 'blur #searchResults': 'hideResults'
 
     renderBandResults: (search) ->
       @$('.band-result').remove()
@@ -210,6 +210,7 @@ $ ->
       @results.show()
 
     hideResults: ->
+      console.log 'hiding'
       @results.hide()
 
     search: ->
