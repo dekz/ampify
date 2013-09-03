@@ -180,24 +180,21 @@ $ ->
       'change #searchInput': 'search'
 
     renderResults: (search) ->
-      @resultsBands.empty()
-      @resultsAlbums.empty()
-      @resultsTracks.empty()
-      console.log 'search results', search
+      @$('.search-result').remove()
 
       for band in search.get 'bands'
         bv = new BandResultView {model: band}
         @listenTo band, 'select', @selectBand
-        @resultsBands.append bv.render().el
+        @resultsBands.after bv.render().el
 
       for album in search.get 'albums'
         av = new AlbumResultView {model: album}
         @listenTo album, 'select', @selectAlbum
-        @resultsAlbums.append av.render().el
+        @resultsAlbums.after av.render().el
 
       for track in search.get 'tracks'
         tv = new TrackResultView {model: track}
-        @resultsTracks.append tv.render().el
+        @resultsTracks.after tv.render().el
       @results.toggle()
 
     search: ->
@@ -213,7 +210,9 @@ $ ->
       @results.toggle()
 
   BandResultView = Backbone.View.extend
-    template: "<div>{{name}}<div>"
+    el: '<li class="search-result" role="presentation">'
+
+    template: '<a role="menuitem">{{name}}</a>'
 
     events: ->
       click: 'select'
@@ -227,7 +226,9 @@ $ ->
       #console.log 'touched band', @model
 
   AlbumResultView = Backbone.View.extend
-    template: "<div>{{title}}<div>"
+    el: '<li class="search-result" role="presentation">'
+
+    template: '<a role="menuitem">{{title}}</a>'
 
     events: ->
       click: 'select'
@@ -240,7 +241,9 @@ $ ->
       @model.select()
 
   TrackResultView = Backbone.View.extend
-    template: "<div>{{title}}<div>"
+    el: '<li class="search-result" role="presentation">'
+
+    template: '<a role="menuitem">{{title}}</a>'
 
     events: ->
       click: 'select'
