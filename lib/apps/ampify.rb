@@ -38,8 +38,9 @@ helpers do
     logger.debug "populating band #{band_id}"
 
     band   = bandcamp :band, band_id
-    raise "No such band: #{band_id}" unless band.respond_to? :band_id
+    raise "No such band: #{band_id}" if !band.respond_to? :band_id or band.nil?
     disco  = bandcamp :discography, band_id
+    raise "No such disco: #{band_id}" if disco.nil?
 
     band = Band.create(:id => band.band_id, :name => band.name , :band_id => band.band_id,
                        :url => band.url, :albums => [])
