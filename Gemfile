@@ -1,4 +1,5 @@
-source 'https://rubygems.org'
+#source 'https://rubygems.org'
+source 'http://rubygems.org'
 ruby '2.0.0'
 
 #gem 'bandcamp-rb', :git => 'git@bitbucket.org:dekz/bandcamp-rb.git'
@@ -13,6 +14,7 @@ gem 'coffee-script'
 gem 'thin'
 gem 'faraday'
 gem 'rspec'
+gem 'sidekiq'
 
 gem 'datamapper', :require => 'data_mapper'
 gem 'dm-sqlite-adapter'
