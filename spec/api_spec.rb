@@ -30,9 +30,9 @@ describe 'API' do
       #'687693559',
       #'432335280',
       #'2595713091',
-      #'3748196749', #emancipator
+      '3748196749', #emancipator
       '3357336941', #S o s
-      '307364241', #melodysheep
+      #'307364241', #melodysheep
     ]
     bands.each do |b|
       resp = @conn.get "/band/#{b}"
