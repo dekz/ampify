@@ -1,0 +1,4 @@
+---
+:verbose: false
+:concurrency:  25
+:require:  ./lib/apps/workers.rb
