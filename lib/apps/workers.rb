@@ -22,9 +22,16 @@ class PopulateBandJob
     logger.debug "populating band #{band_id}"
 
     band   = bandcamp :band, band_id
-    raise "No such band: #{band_id}" if !band.respond_to? :band_id or band.nil?
+    if !band.respond_to? :band_id or band.nil?
+      logger.info "No such band: #{band_id}"
+      return
+    end
+
     disco  = bandcamp :discography, band_id
-    raise "No such disco: #{band_id}" if disco.nil?
+    if disco.nil?
+      logger.info "No such disco: #{band_id}" if disco.nil?
+      return
+    end
 
     band = Band.create(:id => band.band_id, :name => band.name , :band_id => band.band_id,
                        :url => band.url, :albums => [])
