@@ -1,3 +1,3 @@
 web: bundle exec thin start -p 5000 -e development
-web: redis-server redis.conf
-web: bundle exec sidekiq -C sidekiq.yml
+rake: redis-server redis.conf
+rake: bundle exec sidekiq -C sidekiq.yml
