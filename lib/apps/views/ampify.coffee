@@ -397,7 +397,10 @@ $ ->
       @listenTo @model, 'change', @render
 
     template: """
-      <span class="list-group-item">{{title}} </span>
+      <a href="#" class="thumbnail">
+        <img src="{{large_art_url}}" >
+        <span class="list-group-item">{{title}} </span>
+      </a>
     """
 
     render: ->
