@@ -118,12 +118,11 @@ get '/search/all/:text' do
   }
 
   if result.all? { |key,val| val.empty? }
-    bands = bandcamp :search, text
-    bands.each do |b|
-      ours = populate_band b.band_id
-      p ours
-    end
+    bandcamp(:search, text).each { |b| populate_band b.band_id }
+    # Come back later
+    return 202
   end
+
   result.to_json
 end
 

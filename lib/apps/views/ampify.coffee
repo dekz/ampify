@@ -39,6 +39,8 @@ $ ->
       url: ''
 
   Album = Backbone.Model.extend
+    url: () ->
+      return "/album/#{@get 'id'}"
     select: ->
       @trigger 'select', this
 
@@ -416,11 +418,16 @@ $ ->
         <img src="{{large_art_url}}" >
         <span class="list-group-item">{{title}} </span>
       </a>
+      {{about}}
     """
 
     render: (track) ->
-      console.log track.attributes
-      @$el.html Mustache.render(@template, track.attributes)
+      album = new Album { id: track.get 'album_id' }
+      album.fetch({
+        success: () =>
+          @$el.html Mustache.render(@template, album.attributes)
+      })
+      #@$el.html Mustache.render(@template, album.attributes)
       return this
 
 
