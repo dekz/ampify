@@ -34,7 +34,7 @@ class Album
   property :release_date,  String
   property :created_at,    DateTime, :default => DateTime.now
   property :large_art_url, String, :length => 150
-  property :about,         String, :length => 1000
+  property :about,         String, :length => 10000
   property :url,           String, :length => 150
   has n, :tracks
   belongs_to :band
