@@ -247,7 +247,6 @@ $ ->
 
     select: ->
       @model.select()
-      #console.log 'touched band', @model
 
   AlbumResultView = Backbone.View.extend
     el: '<li class="album-result" role="presentation">'
@@ -407,6 +406,23 @@ $ ->
       @$el.html Mustache.render(@template, @model.attributes)
       return this
 
+  BandView = Backbone.View.extend
+    el: '#bandInfo'
+    initialize: ->
+      @listenTo @collection, 'change:playing', @render
+
+    template: """
+      <a href="#" class="thumbnail">
+        <img src="{{large_art_url}}" >
+        <span class="list-group-item">{{title}} </span>
+      </a>
+    """
+
+    render: (track) ->
+      console.log track.attributes
+      @$el.html Mustache.render(@template, track.attributes)
+      return this
+
 
   PlaylistView = Backbone.View.extend
     el: '#playlist'
@@ -470,3 +486,4 @@ $ ->
   playerView = new PlayerView {collection: playlist}
   playlistView = new PlaylistView {collection: playlist}
   currentlyPlayingView = new CurrentlyPlayingView {collection: playlist}
+  bandView = new BandView { collection: playlist }
