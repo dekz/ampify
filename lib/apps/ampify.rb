@@ -10,17 +10,20 @@ require 'json'
 require 'logger'
 require 'sidekiq'
 
-$sensitive = YAML::load File.read './sensitive.yml'
-Bandcamp.config.api_key = $sensitive[:api_key]
+require_relative './models/song'
 
-configure :development do
-    set :logging, Logger::DEBUG
-    DataMapper::Logger.new($stdout, :debug)
+configure do
+  sensitive = YAML::load File.read './sensitive.yml'
+  Bandcamp.config.api_key = sensitive[:api_key]
+  DataModel.connect
 end
 
-require_relative './models/song'
-require_relative './workers'
+configure :development do
+  set :logging, Logger::DEBUG
+  DataMapper::Logger.new($stdout, :debug)
+end
 
+require_relative './workers'
 
 helpers do
   def logger

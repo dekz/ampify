@@ -3,8 +3,10 @@ require 'data_mapper'
 require 'dm-sqlite-adapter'
 require_relative './models/song'
 require 'bandcamp_api'
+
 $sensitive = YAML::load File.read './sensitive.yml'
 Bandcamp.config.api_key = $sensitive[:api_key]
+DataModel.connect
 
 class PopulateBandJob
   include Sidekiq::Worker
