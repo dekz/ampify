@@ -47,6 +47,7 @@ class PopulateBandJob
                        :album_id => da.album_id, :release_date => album.release_date, :tracks => [],
                       )
       a.about = album.about if album.respond_to? :about
+      a.url = album.url if album.respond_to? :url
       a.large_art_url = album.large_art_url if album.respond_to? :large_art_url
 
       # Grab them tracks, not sure how long the streaming urls are valid for

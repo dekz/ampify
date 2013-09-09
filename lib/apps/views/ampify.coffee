@@ -414,9 +414,9 @@ $ ->
       @listenTo @collection, 'change:playing', @render
 
     template: """
-      <a href="#" class="thumbnail">
+      <a href="{{url}}" class="thumbnail">
         <img src="{{large_art_url}}" >
-        <span class="list-group-item">{{title}} </span>
+        <span class="list-group-item"> {{artist}} - {{title}} </span>
       </a>
       {{about}}
     """
