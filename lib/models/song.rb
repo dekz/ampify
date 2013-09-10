@@ -53,7 +53,7 @@ DataMapper::Model.raise_on_save_failure = true
 class DataModel
   def self.connect
     return if @setup; @setup ||= true
-    home = File.expand_path(File.join(File.dirname(__FILE__), '../../../'))
+    home = File.expand_path(File.join(File.dirname(__FILE__), '../../'))
     DataMapper.setup(:default, "sqlite3://#{File.join(home, "db/bandcamp.db")}")
     DataMapper.auto_upgrade!
   end

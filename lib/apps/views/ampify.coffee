@@ -483,6 +483,10 @@ $ ->
     playTrack: ->
       @model.set 'playing', true
 
+  CollectionRouter = Backbone.Router.extend
+    routes:
+      "*actions": "defaultRoute"
+
 
   # ---------------------------------------------------------------------
 
@@ -494,3 +498,14 @@ $ ->
   playlistView = new PlaylistView {collection: playlist}
   currentlyPlayingView = new CurrentlyPlayingView {collection: playlist}
   bandView = new BandView { collection: playlist }
+
+  collectionRouter = new CollectionRouter
+  collectionRouter.on 'route:defaultRoute', (actions) ->
+    console.log actions
+    a = new Album { id: actions }
+    a.fetch
+      success: () =>
+        for track in a.get 'tracks'
+          playlist.add new Track track
+
+  Backbone.history.start()
