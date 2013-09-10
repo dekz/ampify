@@ -1,5 +1,10 @@
+#header {
+  height: 15%;
+  background: #222;
+}
+
 #ampify {
-  padding-top: 20px;
+  padding-top: 15%;
 }
 
 #audioPlayer {
@@ -7,27 +12,28 @@
 }
 
 #player {
+  font-size: 2em;
+}
+
+#playerControls, #listControls {
+  width: 100%;
+  text-align: center;
+  color: rgb(255,255,255);
 }
 
 #currentlyPlaying {
   color: #cdbfe3;
-  text-align: right;
-  font-size: 12px;
+  text-align: center;
 }
 
-.currently-playing {
-  color: #cdbfe3;
-  text-align: right;
-  font-size: 12px;
+.currently-playing-title {
+  font-style: italic;
 }
 
 #search #searchResults {
   width: 100%;
 }
 
-.player-controls {
-  color: rgb(255,255,255);
-}
 
 .slider {
   text-align: center;
