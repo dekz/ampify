@@ -484,7 +484,7 @@ $ ->
       @model.set 'playing', true
 
   Collection = Backbone.Collection.extend
-    model: Track
+    model: Album
 
     initialize: () ->
       @_meta = {}
@@ -520,10 +520,13 @@ $ ->
   collectionRouter.on 'route:defaultRoute', (actions) ->
     c = new Collection
     c.meta('user', actions)
+    @listenTo c, 'change', (a) ->
+      console.log a.get 'band_name'
+      for track in a.get 'tracks'
+        playlist.add track
     c.fetch
-      success: () =>
+      success: () ->
         for item in c.models
-          console.log item
-          playlist.add item
+          item.fetch()
 
   Backbone.history.start()

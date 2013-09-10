@@ -179,9 +179,13 @@ get '/user/:user/collections' do
    end
   parsed = Parser::Collection.new(@conn.get(params[:user]).body).parse
   parsed = parsed.map do |i|
-    { :title => i['featured_track_title'], :id => i['featured_track'], :duration => i['featured_track_duration'],
-      :band_name => i['band_name'], :album_id => i['tralbum_id']
+   # { :title => i['featured_track_title'], :id => i['featured_track'], :duration => i['featured_track_duration'],
+   #   :band_name => i['band_name'], :album_id => i['tralbum_id']
+   # }
+    {
+      :band_name => i['band_name'], :album_id => i['tralbum_id'], :id => i['tralbum_id']
     }
   end
+  logger.debug parsed
   JSON.dump parsed
 end
