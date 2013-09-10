@@ -88,8 +88,11 @@ GEM
     json (1.8.0)
     json_pure (1.8.0)
     method_source (0.8.2)
+    mini_portile (0.5.1)
     multi_json (1.7.9)
     multipart-post (1.2.0)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -146,6 +149,7 @@ DEPENDENCIES
   faraday
   foreman
   haml
+  nokogiri
   pry
   pry-byebug
   pry-remote

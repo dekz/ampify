@@ -15,6 +15,7 @@ gem 'thin'
 gem 'faraday'
 gem 'rspec'
 gem 'sidekiq'
+gem 'nokogiri'
 
 gem 'datamapper', :require => 'data_mapper'
 gem 'dm-sqlite-adapter'
