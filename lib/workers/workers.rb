@@ -1,8 +1,10 @@
 require 'sidekiq'
 require 'data_mapper'
 require 'dm-sqlite-adapter'
-require_relative './models/song'
 require 'bandcamp_api'
+
+$LOAD_PATH.unshift File.expand_path('..', File.dirname(__FILE__))
+require 'models/song'
 
 $sensitive = YAML::load File.read './sensitive.yml'
 Bandcamp.config.api_key = $sensitive[:api_key]
