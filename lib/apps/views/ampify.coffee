@@ -483,6 +483,23 @@ $ ->
     playTrack: ->
       @model.set 'playing', true
 
+  Collection = Backbone.Collection.extend
+    model: Track
+
+    initialize: () ->
+      @_meta = {}
+
+    meta: (prop, value) ->
+      # I don't freaking want nulls so value? sucks
+      if typeof value isnt 'undefined'
+        return @_meta[prop] = value
+      else
+        return @_meta[prop]
+
+    url: ()->
+      console.log @_meta
+      return "/user/#{@meta 'user'}/collections"
+
   CollectionRouter = Backbone.Router.extend
     routes:
       "*actions": "defaultRoute"
@@ -501,11 +518,12 @@ $ ->
 
   collectionRouter = new CollectionRouter
   collectionRouter.on 'route:defaultRoute', (actions) ->
-    console.log actions
-    a = new Album { id: actions }
-    a.fetch
+    c = new Collection
+    c.meta('user', actions)
+    c.fetch
       success: () =>
-        for track in a.get 'tracks'
-          playlist.add new Track track
+        for item in c.models
+          console.log item
+          playlist.add item
 
   Backbone.history.start()

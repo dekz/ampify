@@ -178,5 +178,10 @@ get '/user/:user/collections' do
      faraday.adapter  Faraday.default_adapter
    end
   parsed = Parser::Collection.new(@conn.get(params[:user]).body).parse
-  p parsed
+  parsed = parsed.map do |i|
+    { :title => i['featured_track_title'], :id => i['featured_track'], :duration => i['featured_track_duration'],
+      :band_name => i['band_name'], :album_id => i['tralbum_id']
+    }
+  end
+  JSON.dump parsed
 end
