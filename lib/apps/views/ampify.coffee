@@ -305,8 +305,9 @@ $ ->
       @reset()
 
     reset: ->
-      @title.text ''
-      @time.text ''
+      @title.text 'Ampify'
+      @time.text '-'
+      @total.text '-'
       @progress.slider('setValue', 0)
       $('#progress').hide()
 
