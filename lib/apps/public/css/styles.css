@@ -1,9 +1,10 @@
 #header {
   height: 20%;
-  min-height: 200px;
+  min-height: 200px; /* naughty */
   background: #222;
 }
 
+/*tsk tsk*/
 #ampify {
   padding-top: 240px;
 }
