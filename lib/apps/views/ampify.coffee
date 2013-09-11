@@ -435,7 +435,7 @@ $ ->
     el: '#playlist'
 
     initialize: ->
-      @listenTo @collection, 'add', @render
+      @listenTo @collection, 'add', @renderTrack
 
     render: ->
       # makes it so only one redraw occurs per add
@@ -448,6 +448,12 @@ $ ->
 
       @$el.append container
       return this
+
+    renderTrack: (track) ->
+      trackView = new TrackView {model: track}
+      @$el.append trackView.render().el
+      return this
+
 
 
   TrackView = Backbone.View.extend
