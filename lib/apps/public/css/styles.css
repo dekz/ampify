@@ -1,12 +1,24 @@
-#header {
-  height: 20%;
-  min-height: 200px; /* naughty */
-  background: #222;
+@media (min-width: 992px){
+  #header {
+    height: 100px;
+    background: #222;
+  }
+
+  #ampify {
+    padding-top: 140px;
+  }
 }
 
-/*tsk tsk*/
-#ampify {
-  padding-top: 240px;
+@media (max-width: 992px){
+  #header {
+    height: 200px;
+    background: #222;
+  }
+
+  /*tsk tsk*/
+  #ampify {
+    padding-top: 240px;
+  }
 }
 
 #audioPlayer {
@@ -18,6 +30,7 @@
 }
 
 #playerControls, #listControls {
+  user-select: none;
   width: 100%;
   text-align: center;
   color: rgb(255,255,255);
