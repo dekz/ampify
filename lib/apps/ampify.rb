@@ -44,6 +44,11 @@ helpers do
   end
 
   def populate_band band_id
+    queue = Sidekiq::Queue.new
+    same = queue.select do |job|
+      job.args == [band_id] or job.args == band_id
+    end
+    return unless same.empty?
     PopulateBandJob.perform_async(band_id)
   end
 
