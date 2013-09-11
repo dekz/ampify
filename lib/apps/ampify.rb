@@ -9,8 +9,12 @@ require 'dm-sqlite-adapter'
 require 'json'
 require 'logger'
 require 'sidekiq'
+require 'faraday'
+$LOAD_PATH.unshift File.expand_path('..', File.dirname(__FILE__))
 
-require_relative './models/song'
+require 'models/song'
+require 'parser/collection'
+require 'workers/workers'
 
 configure do
   sensitive = YAML::load File.read './sensitive.yml'
@@ -23,7 +27,6 @@ configure :development do
   DataMapper::Logger.new($stdout, :debug)
 end
 
-require_relative './workers'
 
 helpers do
   def logger
@@ -34,13 +37,18 @@ helpers do
     result = Bandcamp.get.send type, query
     # Item doesn't exist
     if result.respond_to? :error and result.error
-      logger.debug result.error
-      raise result.error
+      logger.debug result.error_message
+      raise result.error_message
     end
     result
   end
 
   def populate_band band_id
+    queue = Sidekiq::Queue.new
+    same = queue.select do |job|
+      job.args == [band_id] or job.args == band_id
+    end
+    return unless same.empty?
     PopulateBandJob.perform_async(band_id)
   end
 
@@ -49,7 +57,7 @@ helpers do
     ours = Album.first query
     unless ours
       if query[:album_id]
-        album = bandcamp :album, query[:album_id]
+        album = bandcamp :album, query[:album_id] rescue halt 404
         band = find_band :band_id => album.band_id
         ours = Album.first :album_id => album.album_id
       end
@@ -169,6 +177,20 @@ delete '/playlist/:id' do
   result.destroy
 end
 
-get '/test' do
-  pry binding
+get '/user/:user/collections' do
+  content_type :json
+   @conn = Faraday.new(:url => 'http://bandcamp.com') do |faraday|
+     faraday.adapter  Faraday.default_adapter
+   end
+  parsed = Parser::Collection.new(@conn.get(params[:user]).body).parse
+  parsed = parsed.map do |i|
+   # { :title => i['featured_track_title'], :id => i['featured_track'], :duration => i['featured_track_duration'],
+   #   :band_name => i['band_name'], :album_id => i['tralbum_id']
+   # }
+    {
+      :band_name => i['band_name'], :album_id => i['tralbum_id'], :id => i['tralbum_id']
+    }
+  end
+  logger.debug parsed
+  JSON.dump parsed
 end

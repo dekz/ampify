@@ -447,7 +447,7 @@ $ ->
     el: '#playlist'
 
     initialize: ->
-      @listenTo @collection, 'add', @render
+      @listenTo @collection, 'add', @renderTrack
 
     render: ->
       # makes it so only one redraw occurs per add
@@ -460,6 +460,12 @@ $ ->
 
       @$el.append container
       return this
+
+    renderTrack: (track) ->
+      trackView = new TrackView {model: track}
+      @$el.append trackView.render().el
+      return this
+
 
 
   TrackView = Backbone.View.extend
@@ -495,6 +501,27 @@ $ ->
     playTrack: ->
       @model.set 'playing', true
 
+  Collection = Backbone.Collection.extend
+    model: Album
+
+    initialize: () ->
+      @_meta = {}
+
+    meta: (prop, value) ->
+      # I don't freaking want nulls so value? sucks
+      if typeof value isnt 'undefined'
+        return @_meta[prop] = value
+      else
+        return @_meta[prop]
+
+    url: ()->
+      console.log @_meta
+      return "/user/#{@meta 'user'}/collections"
+
+  CollectionRouter = Backbone.Router.extend
+    routes:
+      "*actions": "defaultRoute"
+
 
   # ---------------------------------------------------------------------
 
@@ -506,3 +533,18 @@ $ ->
   playlistView = new PlaylistView {collection: playlist}
   currentlyPlayingView = new CurrentlyPlayingView {collection: playlist}
   bandView = new BandView { collection: playlist }
+
+  collectionRouter = new CollectionRouter
+  collectionRouter.on 'route:defaultRoute', (actions) ->
+    c = new Collection
+    c.meta('user', actions)
+    @listenTo c, 'change', (a) ->
+      console.log a.get 'band_name'
+      for track in a.get 'tracks'
+        playlist.add track
+    c.fetch
+      success: () ->
+        for item in c.models
+          item.fetch()
+
+  Backbone.history.start()
