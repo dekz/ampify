@@ -1,10 +1,11 @@
 #header {
   height: 20%;
+  min-height: 200px;
   background: #222;
 }
 
 #ampify {
-  padding-top: 20%;
+  padding-top: 240px;
 }
 
 #audioPlayer {
