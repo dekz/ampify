@@ -291,6 +291,7 @@ $ ->
 
       @title = $ '#currentlyPlayingTitle'
       @time = $ '#currentlyPlayingTime'
+      @total = $ '#currentlyPlayingTotal'
       @player = $('#audioPlayer')[0]
       @player.addEventListener 'ended', => @trackEnded()
       @player.addEventListener 'timeupdate', => @timeUpdate()
@@ -318,7 +319,17 @@ $ ->
 
     timeUpdate: ->
       pct = (@player.currentTime / @player.duration) * 100
-      @time.text "#{@player.currentTime} / #{@player.duration}"
+
+      currentSec = new Date(null)
+      currentSec.setSeconds(parseFloat(@player.currentTime))
+      currentTime = currentSec.toISOString().substr(11, 8)
+
+      totalSec = new Date(null)
+      totalSec.setSeconds(parseFloat(@player.duration))
+      totalTime = totalSec.toISOString().substr(11, 8)
+
+      @time.text "#{currentTime}"
+      @total.text "#{totalTime}"
       @progress.slider('setValue', pct)
 
   PlayerView = Backbone.View.extend

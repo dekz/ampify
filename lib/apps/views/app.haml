@@ -5,7 +5,10 @@
     
     %div{id: 'currentlyPlaying'}
       %div.currently-playing-title{id: 'currentlyPlayingTitle'} &nbsp;
-      %div.time{id: 'currentlyPlayingTime'} &nbsp;
+      %div.currently-playing-time
+        %span{id: 'currentlyPlayingTime'} &nbsp;
+        %span /
+        %span{id: 'currentlyPlayingTotal'} &nbsp;
         
     %div{id: 'playerControls'}
       %i.player-icon.icon-backward{id: 'prevBtn'}
