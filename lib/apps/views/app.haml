@@ -1,31 +1,3 @@
-%nav.navbar-fixed-top{id: 'header'}
-
-  %div{id: 'player'}
-    %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
-    
-    %div{id: 'currentlyPlaying'}
-      %div.currently-playing-title{id: 'currentlyPlayingTitle'} &nbsp;
-      %div.currently-playing-time
-        %span{id: 'currentlyPlayingTime'} &nbsp;
-        %span /
-        %span{id: 'currentlyPlayingTotal'} &nbsp;
-        
-    %div{id: 'playerControls'}
-      %i.player-icon.icon-backward{id: 'prevBtn'}
-      %i.player-icon.icon-play{id: 'playPauseBtn'}
-      %i.player-icon.icon-forward{id: 'nextBtn'}
-
-    %div{id: 'listControls'}
-      %i.player-icon.icon-volume-up{id: 'muteBtn'}
-      %i.player-icon.icon-random{id: 'random'}
-      %i.player-icon.icon-repeat{id: 'repeat'}
-    
-    %div{id: 'volume' }
-      %div.slider
-    
-    %div{id: 'progress'}
-      %div.slider
-
 %div.container{id: 'ampify'}
   %div.row
     %div.col-md-5{id: 'search'}
@@ -48,8 +20,30 @@
         %h4.panel-heading 
         %table.table.table-hover.table-condensed{id: 'playlist'}
     %div.col-md-2
-      %div.panel{id: 'bandInfo'}
-        %h4.panel-heading Band
-        %ul.list-group{id: 'band'}
-        %h6.panel-heading{id: 'bandAlbums'} Albums
-        %h6.panel-heading Info
+      %div.panel{id: 'band'}
+        %div{id: 'player'}
+          %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
+
+          %div{id: 'currentlyPlaying'}
+            %div.currently-playing-title{id: 'currentlyPlayingTitle'} &nbsp;
+            %div.currently-playing-time
+              %span{id: 'currentlyPlayingTime'} &nbsp;
+              %span /
+              %span{id: 'currentlyPlayingTotal'} &nbsp;
+          %div{id: 'progress'}
+            %div.slider
+
+          %div{id: 'playerControls'}
+            %i.player-icon.icon-backward{id: 'prevBtn'}
+            %i.player-icon.icon-play{id: 'playPauseBtn'}
+            %i.player-icon.icon-forward{id: 'nextBtn'}
+
+          %div{id: 'listControls'}
+            %i.player-icon.icon-volume-up{id: 'muteBtn'}
+            %i.player-icon.icon-random{id: 'random'}
+            %i.player-icon.icon-repeat{id: 'repeat'}
+
+          %div{id: 'volume' }
+            %div.slider
+
+        %div{id: 'bandInfo'}

@@ -6,7 +6,7 @@
 
 /*tsk tsk*/
 #ampify {
-  padding-top: 240px;
+  padding-top: 20px;
 }
 
 #audioPlayer {
@@ -14,7 +14,7 @@
 }
 
 #player {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 #playerControls, #listControls {
@@ -120,4 +120,8 @@
   color: #ffffff;
   text-decoration: none;
   background-color: rgba(205, 191, 227, 1);
+}
+
+#band {
+  position: fixed;
 }

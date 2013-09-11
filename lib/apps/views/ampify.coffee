@@ -403,16 +403,13 @@ $ ->
       @collection.prevTrack(@currentTrack).set 'playing', true
 
 
-
-
   AlbumView = Backbone.View.extend
     initialize: ->
       @listenTo @model, 'change', @render
 
     template: """
-      <a href="#" class="thumbnail">
-        <img src="{{large_art_url}}" >
-        <span class="list-group-item">{{title}} </span>
+      <a href="#" class="">
+        <span class="list-group-item">{{title}}</span>
       </a>
     """
 
@@ -466,6 +463,28 @@ $ ->
       @$el.append trackView.render().el
       return this
 
+  PlaylistView2 = Backbone.View.extend
+    el: '#playlist'
+
+    initialize: ->
+      @listenTo @collection, 'add', @renderAlbum
+
+    render: ->
+      # makes it so only one redraw occurs per add
+      @$el.empty()
+      container = document.createDocumentFragment()
+
+      @collection.each (album) ->
+        trackView = new AlbumView {model: album}
+        container.appendChild trackView.render().el
+
+      @$el.append container
+      return this
+
+    renderTrack: (album) ->
+      trackView = new AlbumView {model: album}
+      @$el.append trackView.render().el
+      return this
 
 
   TrackView = Backbone.View.extend
