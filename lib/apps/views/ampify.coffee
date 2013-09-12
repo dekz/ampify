@@ -12,6 +12,8 @@ $ ->
   Track = Backbone.Model.extend
     defaults:
       band_name: ''
+    url: ()->
+      return "/track/#{@get 'id'}"
 
   Player = Backbone.Model
 
@@ -547,6 +549,12 @@ $ ->
       success: () ->
         for item in c.models
           item.fetch()
+
+  collectionRouter.on 'route:loadTrack', (value) ->
+    c = new Track { id: value }
+    @listenTo c, 'change', (a) ->
+      playlist.add c
+    c.fetch()
 
   collectionRouter.on 'route:loadBand', (value) ->
     c = new Discography { band_id: value }
