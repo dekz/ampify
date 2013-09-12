@@ -122,6 +122,8 @@
   background-color: rgba(205, 191, 227, 1);
 }
 
-#band {
-  position: fixed;
+@media (min-width: 768px) {
+  #band {
+    position: fixed;
+  }
 }
