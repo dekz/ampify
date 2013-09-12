@@ -118,10 +118,10 @@ $ ->
 
       @render()
 
-      @collection.add [
-        new Album
-          id: 3619628392 # Tycho - Dive
-      ]
+#      @collection.add [
+#        new Album
+#          id: 3619628392 # Tycho - Dive
+#      ]
 
       # @collection.add [
       #   new Album
@@ -536,6 +536,7 @@ $ ->
   collectionRouter = new CollectionRouter
 
   collectionRouter.on 'route:defaultRoute', (actions) ->
+    actions = 'dekz' unless actions
     c = new Collection
     c.meta('user', actions)
     @listenTo c, 'change', (a) ->
