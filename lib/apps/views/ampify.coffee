@@ -6,6 +6,9 @@ $ ->
 
   # Actual Mustache is defined.
 
+  # Helper methods
+  
+
   # ###
   # Models and Collections
   # ###
@@ -357,7 +360,10 @@ $ ->
         'max': 100,
         'value': 75,
       }).on 'slide', (ev) ->
-        $('#audioPlayer')[0].volume = (ev.value / 100)
+        @player.volume = (ev.value / 100)
+
+      # nathan likes silence
+      @player.volume = 0
 
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'

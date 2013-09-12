@@ -1,7 +1,6 @@
 %nav.navbar-fixed-top{id: 'header'}
   %div.row{id: 'player'}
-    %div.col-md-3
-    %div.col-md-3
+    %div.col-md-4
       %audio{id: 'audioPlayer', src: '', preload: 'metadata', controls: 'controls', autoplay: ''}
       
       %div{id: 'currentlyPlaying'}
@@ -11,11 +10,13 @@
           %span /
           %span{id: 'currentlyPlayingTotal'} &nbsp;
           
+    %div.col-md-4
       %div{id: 'playerControls'}
         %i.player-icon.icon-backward{id: 'prevBtn'}
         %i.player-icon.icon-play{id: 'playPauseBtn'}
         %i.player-icon.icon-forward{id: 'nextBtn'}
-    %div.col-md-3
+        
+    %div.col-md-4
       %div{id: 'listControls'}
         %i.player-icon.icon-volume-up{id: 'muteBtn'}
         %i.player-icon.icon-random{id: 'random'}
