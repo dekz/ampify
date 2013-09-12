@@ -118,10 +118,10 @@ $ ->
 
       @render()
 
-#      @collection.add [
-#        new Album
-#          id: 3619628392 # Tycho - Dive
-#      ]
+      @collection.add [
+        new Album
+          id: 3619628392 # Tycho - Dive
+      ]
 
       # @collection.add [
       #   new Album
@@ -443,6 +443,7 @@ $ ->
 
     initialize: ->
       @listenTo @collection, 'add', @renderTrack
+      @listenTo @collection, 'reset', @render
 
     render: ->
       # makes it so only one redraw occurs per add
@@ -548,6 +549,7 @@ $ ->
 
   collectionRouter.on 'route:loadBand', (value) ->
     c = new Discography { band_id: value }
+    playlist.reset()
     @listenTo c, 'change', (a) ->
       for album in a.get 'albums'
         @listenTo album, 'change', (ab) ->
