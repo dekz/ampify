@@ -118,10 +118,10 @@ $ ->
 
       @render()
 
-      @collection.add [
-        new Album
-          id: 3619628392 # Tycho - Dive
-      ]
+#      @collection.add [
+#        new Album
+#          id: 3619628392 # Tycho - Dive
+#      ]
 
       # @collection.add [
       #   new Album
@@ -309,8 +309,15 @@ $ ->
       @progress.slider('setValue', 0)
       $('#progress').hide()
 
+    titleTemplate:
+      '<a role="menuitem" href="#track/{{id}}">
+         <i class="text-center currently-playing">{{title}} - {{band_name}}</i>
+       </a>'
+    renderTitle: (track) ->
+      @title.html Mustache.render(@titleTemplate, track.attributes)
+
     changeTrack: (track) ->
-      @title.text "#{track.get 'title'} - #{track.get 'band_name'}"
+      @renderTitle track
       $('#progress').show()
 
     seek: (pct) ->
@@ -508,8 +515,11 @@ $ ->
 
   CollectionRouter = Backbone.Router.extend
     routes:
+      "playlist/:value": "loadPlaylist"
+      "album/:value": "loadAlbum"
+      "track/:value": "loadTrack"
+      "band/:value": "loadBand"
       "*actions": "defaultRoute"
-
 
   # ---------------------------------------------------------------------
 
@@ -523,6 +533,7 @@ $ ->
   bandView = new BandView { collection: playlist }
 
   collectionRouter = new CollectionRouter
+
   collectionRouter.on 'route:defaultRoute', (actions) ->
     c = new Collection
     c.meta('user', actions)
@@ -534,5 +545,16 @@ $ ->
       success: () ->
         for item in c.models
           item.fetch()
+
+  collectionRouter.on 'route:loadBand', (value) ->
+    c = new Discography { band_id: value }
+    @listenTo c, 'change', (a) ->
+      for album in a.get 'albums'
+        @listenTo album, 'change', (ab) ->
+          for track in album.get 'tracks'
+            playlist.add track
+        album.fetch()
+    c.fetch
+      success: () ->
 
   Backbone.history.start()
