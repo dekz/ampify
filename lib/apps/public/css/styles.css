@@ -122,8 +122,20 @@
   background-color: rgba(205, 191, 227, 1);
 }
 
+/* Default small to no extra band info (about, other albums) */
+#bandAbout {
+  display: none;
+}
+
 @media (min-width: 768px) {
   #band {
     position: fixed;
+  }
+  #bandAbout {
+    display: inline;
+  }
+  .band-scroll {
+    overflow: auto;
+    height: 20%;
   }
 }

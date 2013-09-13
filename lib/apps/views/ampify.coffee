@@ -430,22 +430,28 @@ $ ->
     el: '#bandInfo'
     initialize: ->
       @listenTo @collection, 'change:playing', @render
+      @decal = @$ '#bandDecal'
+      @about = @$ '#bandAbout'
 
-    template: """
+    artTemplate: """
       <a href="{{url}}" class="thumbnail">
         <img src="{{large_art_url}}" >
         <span class="list-group-item"> {{artist}} - {{title}} </span>
       </a>
-      {{about}}
+    """
+    infoTemplate: """
+      <div class='band-scroll'>
+        {{about}}
+      </div>
     """
 
     render: (track) ->
       album = new Album { id: track.get 'album_id' }
       album.fetch({
         success: () =>
-          @$el.html Mustache.render(@template, album.attributes)
+          @decal.html Mustache.render(@artTemplate, album.attributes)
+          @about.html Mustache.render(@infoTemplate, album.attributes)
       })
-      #@$el.html Mustache.render(@template, album.attributes)
       return this
 
 
