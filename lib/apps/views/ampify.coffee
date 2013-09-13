@@ -490,6 +490,12 @@ $ ->
     initialize: ->
       @listenTo @model, 'change', @render
 
+      window.tot = totalSec = new Date(null)
+      totalSec.setSeconds(parseFloat(@model.get 'duration'))
+      totalTime = totalSec.toISOString().substr(11, 8)
+      console.log totalSec.toISOString()
+      @model.set 'duration', totalTime
+
     template: """
       <td class="badge-td">
         {{#playing }}
@@ -497,10 +503,10 @@ $ ->
         {{/playing}}
       </td>
       <td>
-        <span>{{title}}</span>
+        <span><a href="#track/{{id}}" >{{title}}</a></span>
       </td>
       <td>
-        <span>{{band_name}}</span>
+        <span><a href="#band/{{band_id}}">{{band_name}}</a></span>
       </td>
       <td>
         <span>{{duration}}</span>
