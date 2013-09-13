@@ -490,10 +490,9 @@ $ ->
     initialize: ->
       @listenTo @model, 'change', @render
 
-      window.tot = totalSec = new Date(null)
+      totalSec = new Date(null)
       totalSec.setSeconds(parseFloat(@model.get 'duration'))
       totalTime = totalSec.toISOString().substr(11, 8)
-      console.log totalSec.toISOString()
       @model.set 'duration', totalTime
 
     template: """
