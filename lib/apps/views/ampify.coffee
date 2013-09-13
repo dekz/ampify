@@ -359,7 +359,7 @@ $ ->
         'tooltip': 'hide',
         'max': 100,
         'value': 75,
-      }).on 'slide', (ev) ->
+      }).on 'slide', (ev) =>
         @player.volume = (ev.value / 100)
 
       # nathan likes silence
