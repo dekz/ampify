@@ -6,6 +6,22 @@ $ ->
 
   # Actual Mustache is defined.
 
+  # Helper methods
+
+  String.prototype.toHHMMSS = () ->
+    sec_num = parseInt this, 10
+    hours   = Math.floor(sec_num / 3600)
+    minutes = Math.floor((sec_num - (hours * 3600)) / 60)
+    seconds = sec_num - (hours * 3600) - (minutes * 60)
+
+    hours = if hours < 10 and not 0 then "0#{hours}" else hours
+    minutes = "0"+minutes if minutes < 10
+    seconds = "0"+seconds if seconds < 10
+    time = if hours == '00' then '' else "#{hours}:"
+    time = time+minutes+':'+seconds
+    return time
+
+
   # ###
   # Models and Collections
   # ###
@@ -293,6 +309,7 @@ $ ->
 
       @title = $ '#currentlyPlayingTitle'
       @time = $ '#currentlyPlayingTime'
+      @total = $ '#currentlyPlayingTotal'
       @player = $('#audioPlayer')[0]
       @player.addEventListener 'ended', => @trackEnded()
       @player.addEventListener 'timeupdate', => @timeUpdate()
@@ -306,8 +323,9 @@ $ ->
       @reset()
 
     reset: ->
-      @title.text ''
-      @time.text ''
+      @title.text 'Ampify'
+      @time.text '-'
+      @total.text '-'
       @progress.slider('setValue', 0)
       $('#progress').hide()
 
@@ -327,7 +345,10 @@ $ ->
 
     timeUpdate: ->
       pct = (@player.currentTime / @player.duration) * 100
-      @time.text "#{@player.currentTime} / #{@player.duration}"
+      currentTime = parseFloat(@player.currentTime).toString().toHHMMSS()
+      totalTime = parseFloat(@player.duration).toString().toHHMMSS()
+      @total.text "#{totalTime}"
+      @time.text "#{currentTime}"
       @progress.slider('setValue', pct)
 
   PlayerView = Backbone.View.extend
@@ -344,8 +365,8 @@ $ ->
         'tooltip': 'hide',
         'max': 100,
         'value': 75,
-      }).on 'slide', (ev) ->
-        $('#audioPlayer')[0].volume = (ev.value / 100)
+      }).on 'slide', (ev) =>
+        @player.volume = (ev.value / 100)
 
       @playPauseBtn = @$ '#playPauseBtn'
       @prevBtn = @$ '#prevBtn'
@@ -471,6 +492,7 @@ $ ->
 
     initialize: ->
       @listenTo @model, 'change', @render
+      @model.set 'duration', @model.get('duration').toHHMMSS()
 
     template: """
       <td class="badge-td">
@@ -479,10 +501,10 @@ $ ->
         {{/playing}}
       </td>
       <td>
-        <span>{{title}}</span>
+        <span><a href="#track/{{id}}" >{{title}}</a></span>
       </td>
       <td>
-        <span>{{band_name}}</span>
+        <span><a href="#band/{{band_id}}">{{band_name}}</a></span>
       </td>
       <td>
         <span>{{duration}}</span>
