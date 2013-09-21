@@ -309,6 +309,7 @@ $ ->
 
       @title = $ '#currentlyPlayingTitle'
       @time = $ '#currentlyPlayingTime'
+      @divider = $ '#cpDivider'
       @total = $ '#currentlyPlayingTotal'
       @player = $('#audioPlayer')[0]
       @player.addEventListener 'ended', => @trackEnded()
@@ -323,9 +324,10 @@ $ ->
       @reset()
 
     reset: ->
-      @title.text 'Ampify'
-      @time.text '-'
-      @total.text '-'
+      @title.text ' '
+      @time.text ' '
+      @divider.text ' '
+      @total.text ' '
       @progress.slider('setValue', 0)
       $('#progress').hide()
 
@@ -349,6 +351,7 @@ $ ->
       totalTime = parseFloat(@player.duration).toString().toHHMMSS()
       @total.text "#{totalTime}"
       @time.text "#{currentTime}"
+      @divider.text "/"
       @progress.slider('setValue', pct)
 
   PlayerView = Backbone.View.extend
@@ -376,12 +379,17 @@ $ ->
       @stopBtn = @$ '#stopBtn'
       @nextBtn = @$ '#nextBtn'
       @previous = []
+      @randomBtn = @$ '#random'
 
     events:
       'click #playPauseBtn': 'playPause'
       'click #nextBtn': 'nextTrack'
       'click #prevBtn': 'prevTrack'
+      'click #random': 'randomize'
 
+    randomize: ->
+      @collection.reset(@collection.shuffle())
+      console.log @collection
     trackReady: ->
       unless @currentTrack
         @collection.first().set 'playing', true
@@ -526,20 +534,10 @@ $ ->
 
   Collection = Backbone.Collection.extend
     model: Album
-
-    initialize: () ->
-      @_meta = {}
-
-    meta: (prop, value) ->
-      # I don't freaking want nulls so value? sucks
-      if typeof value isnt 'undefined'
-        return @_meta[prop] = value
-      else
-        return @_meta[prop]
+    user: ''
 
     url: ()->
-      console.log @_meta
-      return "/user/#{@meta 'user'}/collections"
+      return "/user/#{@user}/collections"
 
   CollectionRouter = Backbone.Router.extend
     routes:
@@ -565,7 +563,7 @@ $ ->
   collectionRouter.on 'route:defaultRoute', (actions) ->
     actions = 'dekz' unless actions
     c = new Collection
-    c.meta('user', actions)
+    c.user = actions
     @listenTo c, 'change', (a) ->
       console.log a.get 'band_name'
       for track in a.get 'tracks'
