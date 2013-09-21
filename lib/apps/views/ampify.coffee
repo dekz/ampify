@@ -526,7 +526,7 @@ $ ->
       dblclick: 'playTrack'
 
     render: ->
-      @$el.html Mustache.render(@template, @model.attributes)
+      @$el.html Mustache.render(@template, @model.attributes) if !!@model.get('streaming_url')
       return this
 
     playTrack: ->
